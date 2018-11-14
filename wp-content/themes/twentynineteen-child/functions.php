@@ -67,15 +67,33 @@ add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\enqueue_assets' );
  * @param $content
  * @return string
  */
-function rss_post_thumbnail( $content ) {
+function the_permalink_rss( $content ) {
 	global $post;
+
+	return get_post_meta( $post->ID, 'post_source', true );
+}
+add_filter( 'the_permalink_rss', __NAMESPACE__ . '\the_permalink_rss' );
+
+/**
+ * Добавить тумбочки к RSS
+ *
+ * @param $content
+ * @return string
+ */
+function rss_post_excerpt_thumbnail( $content ) {
+	global $post;
+
+	$content = wpautop( $content );
 
 	if ( has_post_thumbnail( $post->ID ) ) {
 		$content = '<p>' . get_the_post_thumbnail( $post->ID, 'full' ) . '</p>' . $content;
 	}
+
+	$content .= '<p><a href="' . get_comments_link( $post->ID ) . '">Обсудить на нашем сайте</a></p>';
+
 	return $content;
 }
-add_filter( 'the_content_feed', __NAMESPACE__ . '\rss_post_thumbnail' );
+add_filter( 'the_excerpt_rss', __NAMESPACE__ . '\rss_post_excerpt_thumbnail' );
 
 /**
  * Если в результате поиска нашелся всего один пост - редиректим на него
@@ -239,7 +257,7 @@ add_action( 'get_template_part_template-parts/post/author', __NAMESPACE__ . '\ad
  * Удалить у стандартных постов ненужные метабоксы
  */
 function remove_content_from_post() {
-	remove_post_type_support( 'post', 'editor' );
+	remove_post_type_support( 'post', 'excerpt' );
 	remove_post_type_support( 'post', 'custom-fields' );
 	remove_post_type_support( 'post', 'page-attributes' );
 	remove_post_type_support( 'post', 'post-formats' );
@@ -269,7 +287,7 @@ function add_metabox_to_post( $post_type, \WP_Post $post ) {
 		</table>
 		<?php
 	};
-	add_meta_box( 'post_additional', 'Дополнительно', $content, $screens );
+	add_meta_box( 'post_additional', 'Дополнительно', $content, $screens, 'advanced', 'high' );
 }
 add_action( 'add_meta_boxes', __NAMESPACE__ . '\add_metabox_to_post', 10, 2 );
 
