@@ -235,4 +235,71 @@ function add_likely() {
 }
 add_action( 'get_template_part_template-parts/post/author', __NAMESPACE__ . '\add_likely' );
 
+/**
+ * Удалить у стандартных постов ненужные метабоксы
+ */
+function remove_content_from_post() {
+	remove_post_type_support( 'post', 'editor' );
+	remove_post_type_support( 'post', 'custom-fields' );
+	remove_post_type_support( 'post', 'page-attributes' );
+	remove_post_type_support( 'post', 'post-formats' );
+	remove_post_type_support( 'post', 'trackbacks' );
+}
+add_action( 'init', __NAMESPACE__ . '\remove_content_from_post' );
+
+/**
+ * Добавляем метабокс на страницу редактирования поста
+ */
+function add_metabox_to_post( $post_type, \WP_Post $post ) {
+	$screens = array( 'post' );
+	$content = function ( \WP_Post $post ) {
+		$url = get_post_meta( $post->ID, 'post_source', true );
+		?>
+		<table class="form-table">
+			<tbody>
+				<tr>
+					<th>
+						<label for="post_source">Ссылка на источник:</label>
+					</th>
+					<td>
+						<input type="text" name="post_source" id="post_source" value="<?php echo esc_url( $url ); ?>" class="regular-text" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<?php
+	};
+	add_meta_box( 'post_additional', 'Дополнительно', $content, $screens );
+}
+add_action( 'add_meta_boxes', __NAMESPACE__ . '\add_metabox_to_post', 10, 2 );
+
+/**
+ * Сохраняем метабокс
+ *
+ * @param $post_id
+ */
+function save_metabox( $post_id ) {
+
+	// Убедимся что поле установлено.
+	if ( ! isset( $_POST['post_source'] ) ) {
+		return;
+	}
+
+	// если это автосохранение ничего не делаем
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		return;
+	}
+
+	// проверяем права юзера
+	if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		return;
+	}
+
+	// Очищаем значение поля input.
+	$data = esc_url_raw( $_POST['post_source'] );
+
+	// Обновляем данные в базе данных.
+	update_post_meta( $post_id, 'post_source', $data );
+}
+add_action( 'save_post', __NAMESPACE__ . '\save_metabox' );
 // eof;
