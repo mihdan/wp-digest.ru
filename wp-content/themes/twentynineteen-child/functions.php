@@ -36,6 +36,14 @@ function setup_theme() {
 			'caption',
 		)
 	);
+
+	// Показать метабокс с выбором формата поста
+	$formats = array(
+		'link',
+		'audio',
+		'video',
+	);
+	add_theme_support( 'post-formats', $formats );
 }
 add_action( 'after_setup_theme', __NAMESPACE__ . '\setup_theme' );
 
@@ -44,6 +52,12 @@ add_action( 'after_setup_theme', __NAMESPACE__ . '\setup_theme' );
  */
 function enqueue_assets() {
 	wp_enqueue_style( 'twentynineteen', get_template_directory_uri() . '/style.css', array(), TWENTYNINETEEN_CHILD_VERSION );
+	wp_enqueue_style( 'twentynineteen-child', get_theme_file_uri( 'assets/css/app.css' ), array(), TWENTYNINETEEN_CHILD_VERSION );
+
+	if ( is_single() ) {
+		wp_enqueue_style( 'likely', get_theme_file_uri( 'assets/css/likely.css' ), array(), TWENTYNINETEEN_CHILD_VERSION );
+		wp_enqueue_script( 'likely', get_theme_file_uri( 'assets/js/likely.js' ), array(), TWENTYNINETEEN_CHILD_VERSION, true );
+	}
 }
 add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\enqueue_assets' );
 
@@ -195,5 +209,30 @@ function add_nofollow_to_loginout( $link ) {
 	return $link;
 }
 add_filter( 'loginout', __NAMESPACE__ . '\add_nofollow_to_loginout' );
+
+/**
+ * Добавить цитату перед текстом
+ *
+ * @param $content
+ *
+ * @return string
+ */
+function add_excerpt_to_content( $content ) {
+
+	global $post;
+
+	$content = sprintf( '<p class="excerpt"><strong>%s</strong></p>', get_the_excerpt( $post->ID ) ) . $content;
+
+	return $content;
+}
+//add_filter( 'the_content', __NAMESPACE__ . '\add_excerpt_to_content' );
+
+/**
+ * Добавить шеры от likely
+ */
+function add_likely() {
+	get_template_part( 'template-parts/likely' );
+}
+add_action( 'get_template_part_template-parts/post/author', __NAMESPACE__ . '\add_likely' );
 
 // eof;
