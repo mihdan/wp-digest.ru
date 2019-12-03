@@ -55,7 +55,7 @@ add_action( 'after_setup_theme', __NAMESPACE__ . '\setup_theme' );
  */
 function enqueue_assets() {
 	//wp_enqueue_style( 'twentynineteen', get_template_directory_uri() . '/style.css', array(), TWENTYNINETEEN_CHILD_VERSION );
-	//wp_enqueue_style( 'twentynineteen-child', get_theme_file_uri( 'assets/css/app.css' ), array(), TWENTYNINETEEN_CHILD_VERSION );
+	wp_enqueue_style( 'twentynineteen-child', plugins_url( 'assets/css/app.css', __FILE__ ), array(), filemtime( plugin_dir_path( __FILE__ ) . 'assets/css/app.css' ) );
 
 	if ( is_single() ) {
 		wp_enqueue_style( 'likely', plugins_url( 'assets/css/likely.css', __FILE__ ), array(), TWENTYNINETEEN_CHILD_VERSION );
@@ -75,7 +75,7 @@ function the_permalink_rss( $content ) {
 
 	return get_post_meta( $post->ID, 'post_source', true );
 }
-add_filter( 'the_permalink_rss', __NAMESPACE__ . '\the_permalink_rss' );
+//add_filter( 'the_permalink_rss', __NAMESPACE__ . '\the_permalink_rss' );
 
 /**
  * Добавить тумбочки к RSS
@@ -252,9 +252,24 @@ function add_excerpt_to_content( $content ) {
  * Добавить шеры от likely
  */
 function add_likely() {
-	require_once 'template-parts/likely.php';
+	if ( is_singular() ) {
+		require_once 'template-parts/likely.php';
+	}
 }
 add_action( 'generate_after_entry_content', __NAMESPACE__ . '\add_likely' );
+
+add_action(
+	'generate_before_content',
+	function() {
+		?>
+		<?php if ( function_exists( 'bcn_display' ) && ! is_front_page() ) : ?>
+			<div class="breadcrumbs" typeof="BreadcrumbList" vocab="http://schema.org/">
+				<?php bcn_display(); ?>
+			</div>
+		<?php endif; ?>
+		<?php
+	}
+);
 
 /**
  * Удалить у стандартных постов ненужные метабоксы

@@ -1,5 +1,7 @@
-.entry-footer,
-.comments-area {
-  margin-left: calc(16.66666667vw);
-  margin-right: calc(16.66666667vw);
+.breadcrumbs {
+  margin-bottom: 20px;
+}
+.breadcrumbs,
+.breadcrumbs a {
+  color: #666 !important;
 }
