@@ -3,6 +3,7 @@
  * Plugin Name: WordPress Digest Setup
  */
 namespace WP_Digest;
+use PHPMailer\PHPMailer\PHPMailer;
 
 define( 'TWENTYNINETEEN_CHILD_VERSION', '1.0' );
 
@@ -22,7 +23,7 @@ function setup_theme() {
 
 	// Включаем поддержку AMP
 	add_theme_support(
-		'amp_',
+		'amp',
 		array(
 			'comments_live_list' => true,
 		)
@@ -178,9 +179,9 @@ add_action( 'admin_bar_menu', __NAMESPACE__ . '\remove_toolbar_node', 999 );
 /**
  * Настройка SMTP
  *
- * @param \PHPMailer $phpmailer объект мэилера
+ * @param PHPMailer $phpmailer объект мэилера
  */
-function smtp_settings( \PHPMailer $phpmailer ) {
+function smtp_settings( PHPMailer $phpmailer ) {
 	// @codingStandardsIgnoreStart
 	$phpmailer->isSMTP();
 	$phpmailer->Host       = SMTP_HOST;
@@ -353,5 +354,37 @@ function custom_right_sidebar_width( $width ) {
 	return $width;
 }
 add_filter( 'generate_right_sidebar_width', __NAMESPACE__ . '\custom_right_sidebar_width' );
+
+/**
+ * Код Google Tag Manager в <head>.
+ */
+add_action(
+	'wp_head',
+	function () {
+		?>
+		<!-- Google Tag Manager -->
+		<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+					new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+				j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+				'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+			})(window,document,'script','dataLayer','GTM-NB92PPM');</script>
+		<!-- End Google Tag Manager -->
+		<?php
+	}
+);
+
+/**
+ * Код Google Tag Manager в <body>.
+ */
+add_action(
+	'wp_body_open',
+	function () {
+		?>
+		<!-- Google Tag Manager (noscript) -->
+		<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NB92PPM" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+		<!-- End Google Tag Manager (noscript) -->
+		<?php
+	}
+);
 
 // eof;
