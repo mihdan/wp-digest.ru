@@ -1,8 +1,8 @@
 <?php
 $z_cf7_to_tlg_args = [
-	'bot_token' => '618641506:AAGa_WvKonJOxXpdZCHb66Qsk7m1XrPYQ28',
+	'bot_token' => TELEGRAM_BOT_TOKEN,
 	'receivers' => [
-		-1001494053671,
+		TELEGRAM_RECEIVERS,
 	],
 ];
 function z_cf7_to_tlg_send_message( $message, $receiver ) {
