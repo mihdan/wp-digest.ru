@@ -254,10 +254,24 @@ function add_excerpt_to_content( $content ) {
  */
 function add_likely() {
 	if ( is_singular() ) {
-		require_once 'template-parts/likely.php';
+		//require_once 'template-parts/likely.php';
+		$url  = get_post_meta( get_the_ID(), 'post_source_url', true );
+		$text = get_post_meta( get_the_ID(), 'post_source_text_', true );
+
+		if ( ! $url ) {
+		    return;
+        }
+
+		if ( ! $text ) {
+		    $parsed = parse_url( $url );
+			$url  = $parsed['scheme'] . '://' . $parsed['host'];
+			$text = $parsed['host'];
+		}
+
+		printf( '<p>Источник: <a href="%s" target="_blank">%s</a></p>', $url, $text );
 	}
 }
-//add_action( 'generate_after_entry_content', __NAMESPACE__ . '\add_likely' );
+add_action( 'generate_after_entry_content', __NAMESPACE__ . '\add_likely', 1 );
 
 add_action(
 	'generate_before_content',
@@ -290,23 +304,32 @@ add_action( 'init', __NAMESPACE__ . '\remove_content_from_post' );
 function add_metabox_to_post( $post_type, \WP_Post $post ) {
 	$screens = array( 'post' );
 	$content = function ( \WP_Post $post ) {
-		$url = get_post_meta( $post->ID, 'post_source', true );
+		$url  = get_post_meta( $post->ID, 'post_source_url', true );
+		$text = get_post_meta( $post->ID, 'post_source_text', true );
 		?>
 		<table class="form-table">
 			<tbody>
 			<tr>
 				<th>
-					<label for="post_source">Ссылка на источник:</label>
+					<label for="post_source_url">Ссылка на источник:</label>
 				</th>
 				<td>
-					<input type="text" name="post_source" id="post_source" value="<?php echo esc_url( $url ); ?>" class="regular-text" />
+					<input type="text" name="post_source_url" id="post_source_url" value="<?php echo esc_url( $url ); ?>" class="regular-text" />
 				</td>
 			</tr>
+            <tr>
+                <th>
+                    <label for="post_source_text">Описание ссылки:</label>
+                </th>
+                <td>
+                    <input type="text" name="post_source_text" id="post_source_text" value="<?php echo esc_attr( $text ); ?>" class="regular-text" />
+                </td>
+            </tr>
 			</tbody>
 		</table>
 		<?php
 	};
-	add_meta_box( 'post_additional', 'Дополнительно', $content, $screens, 'advanced', 'high' );
+	add_meta_box( 'post_additional', 'Источник', $content, $screens, 'advanced', 'high' );
 }
 add_action( 'add_meta_boxes', __NAMESPACE__ . '\add_metabox_to_post', 10, 2 );
 
@@ -318,7 +341,7 @@ add_action( 'add_meta_boxes', __NAMESPACE__ . '\add_metabox_to_post', 10, 2 );
 function save_metabox( $post_id ) {
 
 	// Убедимся что поле установлено.
-	if ( ! isset( $_POST['post_source'] ) ) {
+	if ( ! isset( $_POST['post_source_url'] ) ) {
 		return;
 	}
 
@@ -333,10 +356,12 @@ function save_metabox( $post_id ) {
 	}
 
 	// Очищаем значение поля input.
-	$data = esc_url_raw( $_POST['post_source'] );
+	$url  = esc_url_raw( $_POST['post_source_url'] );
+	$text = esc_html( $_POST['post_source_text'] );
 
 	// Обновляем данные в базе данных.
-	update_post_meta( $post_id, 'post_source', $data );
+	update_post_meta( $post_id, 'post_source_url', $url );
+	update_post_meta( $post_id, 'post_source_text', $text );
 }
 add_action( 'save_post', __NAMESPACE__ . '\save_metabox' );
 
