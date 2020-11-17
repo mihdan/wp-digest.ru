@@ -59,8 +59,8 @@ function enqueue_assets() {
 	wp_enqueue_style( 'twentynineteen-child', plugins_url( 'assets/css/app.css', __FILE__ ), array(), filemtime( plugin_dir_path( __FILE__ ) . 'assets/css/app.css' ) );
 
 	if ( is_single() ) {
-		wp_enqueue_style( 'likely', plugins_url( 'assets/css/likely.css', __FILE__ ), array(), TWENTYNINETEEN_CHILD_VERSION );
-		wp_enqueue_script( 'likely', plugins_url( 'assets/js/likely.js', __FILE__ ), array(), TWENTYNINETEEN_CHILD_VERSION, true );
+		//wp_enqueue_style( 'likely', plugins_url( 'assets/css/likely.css', __FILE__ ), array(), TWENTYNINETEEN_CHILD_VERSION );
+		//wp_enqueue_script( 'likely', plugins_url( 'assets/js/likely.js', __FILE__ ), array(), TWENTYNINETEEN_CHILD_VERSION, true );
 	}
 }
 add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\enqueue_assets' );
@@ -257,7 +257,7 @@ function add_likely() {
 		require_once 'template-parts/likely.php';
 	}
 }
-add_action( 'generate_after_entry_content', __NAMESPACE__ . '\add_likely' );
+//add_action( 'generate_after_entry_content', __NAMESPACE__ . '\add_likely' );
 
 add_action(
 	'generate_before_content',
