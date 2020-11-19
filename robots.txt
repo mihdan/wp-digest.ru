@@ -27,5 +27,5 @@ Allow: /wp-*.jpeg
 Allow: /wp-*.gif
 User-agent: YandexNews
 Allow: /feed/mihdan-yandex-news-feed/
-Host: https://wp-digest.ru
-Sitemap: https://wp-digest.ru/sitemap.xml
+Host: https://wp-digest.com
+Sitemap: https://wp-digest.com/sitemap.xml
