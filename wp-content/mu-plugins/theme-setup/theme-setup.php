@@ -169,7 +169,7 @@ add_filter( 'login_headerurl', __NAMESPACE__ . '\login_headerurl' );
  */
 function remove_toolbar_node( \WP_Admin_Bar $wp_admin_bar ) {
 	$wp_admin_bar->remove_node( 'wp-logo' );
-	$wp_admin_bar->remove_node( 'customize' );
+	//$wp_admin_bar->remove_node( 'customize' );
 	$wp_admin_bar->remove_node( 'comments' );
 	$wp_admin_bar->remove_node( 'wpseo-menu' );
 	$wp_admin_bar->remove_node( 'search' );
@@ -271,10 +271,12 @@ function add_likely() {
 		printf( '<p>Источник: <a href="%s" target="_blank">%s</a></p>', $url, $text );
 	}
 }
-add_action( 'generate_after_entry_content', __NAMESPACE__ . '\add_likely', 1 );
+//add_action( 'generate_after_entry_content', __NAMESPACE__ . '\add_likely', 1 );
+add_action( 'kadence_single_after_entry_content', __NAMESPACE__ . '\add_likely', 1 );
 
 add_action(
-	'generate_before_content',
+	//'generate_before_content',
+	'kadence_single_before_entry_header',
 	function() {
 		?>
 		<?php if ( function_exists( 'bcn_display' ) && ! is_front_page() ) : ?>
