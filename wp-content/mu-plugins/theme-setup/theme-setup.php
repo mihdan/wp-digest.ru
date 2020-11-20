@@ -71,19 +71,6 @@ add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\enqueue_assets' );
  * @param $content
  * @return string
  */
-function the_permalink_rss( $content ) {
-	global $post;
-
-	return get_post_meta( $post->ID, 'post_source', true );
-}
-//add_filter( 'the_permalink_rss', __NAMESPACE__ . '\the_permalink_rss' );
-
-/**
- * Добавить тумбочки к RSS
- *
- * @param $content
- * @return string
- */
 function rss_post_excerpt_thumbnail( $content ) {
 	global $post;
 
@@ -252,30 +239,37 @@ function add_excerpt_to_content( $content ) {
 /**
  * Добавить шеры от likely
  */
-function add_likely() {
+function add_likely( $content ) {
+
+    if ( is_admin() ) {
+        return $content;
+    }
+
 	if ( is_singular() ) {
 		//require_once 'template-parts/likely.php';
 		$url  = get_post_meta( get_the_ID(), 'post_source_url', true );
-		$text = get_post_meta( get_the_ID(), 'post_source_text_', true );
+		$text = get_post_meta( get_the_ID(), 'post_source_text', true );
 
 		if ( ! $url ) {
 		    return;
         }
 
+		$url = add_query_arg( 'utm_source', 'wp-digest.com', $url );
+
 		if ( ! $text ) {
-		    $parsed = parse_url( $url );
-			$url  = $parsed['scheme'] . '://' . $parsed['host'];
-			$text = $parsed['host'];
+			$text = parse_url( $url, PHP_URL_HOST );
+
+			return $content . sprintf( '<p>Источник: <a href="%s" target="_blank">%s</a></p>', $url, $text );
 		}
 
-		printf( '<p>Источник: <a href="%s" target="_blank">%s</a></p>', $url, $text );
+		return $content . sprintf( '<p><a href="%s" target="_blank">%s</a></p>', $url, $text );
 	}
+
+	return $content;
 }
-//add_action( 'generate_after_entry_content', __NAMESPACE__ . '\add_likely', 1 );
-add_action( 'kadence_single_after_entry_content', __NAMESPACE__ . '\add_likely', 1 );
+add_filter( 'the_content', __NAMESPACE__ . '\add_likely', 1 );
 
 add_action(
-	//'generate_before_content',
 	'kadence_single_before_entry_header',
 	function() {
 		?>
@@ -299,88 +293,6 @@ function remove_content_from_post() {
 	remove_post_type_support( 'post', 'trackbacks' );
 }
 add_action( 'init', __NAMESPACE__ . '\remove_content_from_post' );
-
-/**
- * Добавляем метабокс на страницу редактирования поста
- */
-function add_metabox_to_post( $post_type, \WP_Post $post ) {
-	$screens = array( 'post' );
-	$content = function ( \WP_Post $post ) {
-		$url  = get_post_meta( $post->ID, 'post_source_url', true );
-		$text = get_post_meta( $post->ID, 'post_source_text', true );
-		?>
-		<table class="form-table">
-			<tbody>
-			<tr>
-				<th>
-					<label for="post_source_url">Ссылка на источник:</label>
-				</th>
-				<td>
-					<input type="text" name="post_source_url" id="post_source_url" value="<?php echo esc_url( $url ); ?>" class="regular-text" />
-				</td>
-			</tr>
-            <tr>
-                <th>
-                    <label for="post_source_text">Описание ссылки:</label>
-                </th>
-                <td>
-                    <input type="text" name="post_source_text" id="post_source_text" value="<?php echo esc_attr( $text ); ?>" class="regular-text" />
-                </td>
-            </tr>
-			</tbody>
-		</table>
-		<?php
-	};
-	add_meta_box( 'post_additional', 'Источник', $content, $screens, 'advanced', 'high' );
-}
-add_action( 'add_meta_boxes', __NAMESPACE__ . '\add_metabox_to_post', 10, 2 );
-
-/**
- * Сохраняем метабокс
- *
- * @param $post_id
- */
-function save_metabox( $post_id ) {
-
-	// Убедимся что поле установлено.
-	if ( ! isset( $_POST['post_source_url'] ) ) {
-		return;
-	}
-
-	// если это автосохранение ничего не делаем
-	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-		return;
-	}
-
-	// проверяем права юзера
-	if ( ! current_user_can( 'edit_post', $post_id ) ) {
-		return;
-	}
-
-	// Очищаем значение поля input.
-	$url  = esc_url_raw( $_POST['post_source_url'] );
-	$text = esc_html( $_POST['post_source_text'] );
-
-	// Обновляем данные в базе данных.
-	update_post_meta( $post_id, 'post_source_url', $url );
-	update_post_meta( $post_id, 'post_source_text', $text );
-}
-add_action( 'save_post', __NAMESPACE__ . '\save_metabox' );
-
-/**
- * Меняем ширину сайдбара
- *
- * @param integer $width дефолтная ширина
- *
- * @return int
- */
-function custom_right_sidebar_width( $width ) {
-
-	$width = 300;
-
-	return $width;
-}
-add_filter( 'generate_right_sidebar_width', __NAMESPACE__ . '\custom_right_sidebar_width' );
 
 /**
  * Код Google Tag Manager в <head>.
