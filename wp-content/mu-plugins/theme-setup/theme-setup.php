@@ -247,7 +247,7 @@ function add_likely( $content ) {
 		if ( ! $text ) {
 			$text = parse_url( $url, PHP_URL_HOST );
 
-			return $content . sprintf( '<p>Источник: <a href="%s" target="_blank">%s</a></p>', $url, $text );
+			return $content . sprintf( '<p>Читать далее на <a href="%s" target="_blank">%s</a></p>', $url, $text );
 		}
 
 		return $content . sprintf( '<p><a href="%s" target="_blank">%s</a></p>', $url, $text );
