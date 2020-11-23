@@ -10,3 +10,11 @@
   width: 42px !important;
   height: 42px !important;
 }
+
+code {
+  display: inline-block;
+  padding: 0 3px!important;
+  background: #eee8aa!important;
+  text-shadow: 1px 1px #fff!important;
+  color: #8b0000!important;
+}
