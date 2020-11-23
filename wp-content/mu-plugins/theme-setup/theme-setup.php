@@ -3,6 +3,7 @@
  * Plugin Name: WordPress Digest Setup
  */
 namespace WP_Digest;
+
 use PHPMailer\PHPMailer\PHPMailer;
 
 define( 'TWENTYNINETEEN_CHILD_VERSION', '1.0' );
@@ -56,7 +57,7 @@ add_action( 'after_setup_theme', __NAMESPACE__ . '\setup_theme' );
  */
 function enqueue_assets() {
 	//wp_enqueue_style( 'twentynineteen', get_template_directory_uri() . '/style.css', array(), TWENTYNINETEEN_CHILD_VERSION );
-	wp_enqueue_style( 'twentynineteen-child', plugins_url( 'assets/css/app.css', __FILE__ ), array(), filemtime( plugin_dir_path( __FILE__ ) . 'assets/css/app.css' ) );
+	//wp_enqueue_style( 'twentynineteen-child', plugins_url( 'assets/css/app.css', __FILE__ ), array(), filemtime( plugin_dir_path( __FILE__ ) . 'assets/css/app.css' ) );
 
 	if ( is_single() ) {
 		//wp_enqueue_style( 'likely', plugins_url( 'assets/css/likely.css', __FILE__ ), array(), TWENTYNINETEEN_CHILD_VERSION );
@@ -74,13 +75,17 @@ add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\enqueue_assets' );
 function rss_post_excerpt_thumbnail( $content ) {
 	global $post;
 
-	$content = wpautop( $content );
+	$extended = get_extended( $post->post_content );
 
-	if ( has_post_thumbnail( $post->ID ) ) {
-		$content = '<p>' . get_the_post_thumbnail( $post->ID, 'full' ) . '</p>' . $content;
-	}
+	if ( ! empty( $extended['main'] ) ) {
+	    $content = do_blocks( $extended['main'] );
 
-	$content .= '<p><a href="' . get_comments_link( $post->ID ) . '">Обсудить на нашем сайте</a></p>';
+		if ( has_post_thumbnail( $post->ID ) ) {
+			$content = '<p>' . get_the_post_thumbnail( $post->ID, 'full' ) . '</p>' . $content;
+		}
+
+		return $content;
+    }
 
 	return $content;
 }
@@ -220,23 +225,6 @@ function add_nofollow_to_loginout( $link ) {
 add_filter( 'loginout', __NAMESPACE__ . '\add_nofollow_to_loginout' );
 
 /**
- * Добавить цитату перед текстом
- *
- * @param $content
- *
- * @return string
- */
-function add_excerpt_to_content( $content ) {
-
-	global $post;
-
-	$content = sprintf( '<p class="excerpt"><strong>%s</strong></p>', get_the_excerpt( $post->ID ) ) . $content;
-
-	return $content;
-}
-//add_filter( 'the_content', __NAMESPACE__ . '\add_excerpt_to_content' );
-
-/**
  * Добавить шеры от likely
  */
 function add_likely( $content ) {
@@ -324,5 +312,31 @@ add_action(
 		<!-- End Google Tag Manager (noscript) -->
 		<?php
 	}
+);
+
+/**
+ * Добавить лого на странице авторизации.
+ */
+add_action(
+    'login_footer',
+    function () {
+        if ( has_custom_logo() ) {
+            ?>
+            <style>
+                #login h1 a {
+                    width: 160px;
+                    height: 74px;
+                    background-image: url("<?php echo ( wp_get_attachment_image_url( get_theme_mod( 'custom_logo' ), 'full' ) ); ?>");
+                    background-size: 160px auto;
+                }
+                #nav,
+                #backtoblog,
+                .privacy-policy-page-link {
+                    display: none;
+                }
+            </style>
+            <?php
+        }
+    }
 );
 // eof;
