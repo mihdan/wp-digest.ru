@@ -8,6 +8,8 @@ namespace Mihdan\WP_Digest;
 add_action(
 	'kadence_single_after_inner_content',
 	function () {
-		echo apply_shortcodes( '[emoji]' );
+		if ( is_singular( [ 'post', 'job' ] ) ) {
+			echo apply_shortcodes( '[emoji]' );
+		}
 	}
 );
