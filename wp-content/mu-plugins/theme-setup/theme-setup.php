@@ -245,13 +245,13 @@ function add_likely( $content ) {
         return $content;
     }
 
-	if ( is_singular() ) {
+	if ( is_singular( 'post' ) ) {
 		//require_once 'template-parts/likely.php';
 		$url  = get_post_meta( get_the_ID(), 'post_source_url', true );
 		$text = get_post_meta( get_the_ID(), 'post_source_text', true );
 
 		if ( ! $url ) {
-		    return;
+		    return $content;
         }
 
 		$url = add_query_arg( 'utm_source', 'wp-digest.com', $url );
@@ -325,5 +325,4 @@ add_action(
 		<?php
 	}
 );
-
 // eof;
