@@ -247,28 +247,15 @@ function add_likely( $content ) {
 		if ( ! $text ) {
 			$text = parse_url( $url, PHP_URL_HOST );
 
-			return $content . sprintf( '<p>Читать далее на <a href="%s" target="_blank">%s</a></p>', $url, $text );
+			return $content . sprintf( '<p><a class="button button--more" href="%s" target="_blank" title="Читать далее на %s">Читать далее</a></p>', esc_url( $url ), esc_attr( $text ) );
 		}
 
-		return $content . sprintf( '<p><a href="%s" target="_blank">%s</a></p>', $url, $text );
+		return $content . sprintf( '<p><a class="button button--more" href="%s" target="_blank" title="%s">%s</a></p>', esc_url( $url ), esc_attr( $text ), esc_attr( $text ) );
 	}
 
 	return $content;
 }
 add_filter( 'the_content', __NAMESPACE__ . '\add_likely', 1 );
-
-add_action(
-	'kadence_single_before_entry_header',
-	function() {
-		?>
-		<?php if ( function_exists( 'bcn_display' ) && ! is_front_page() ) : ?>
-			<div class="breadcrumbs" typeof="BreadcrumbList" vocab="http://schema.org/">
-				<?php bcn_display(); ?>
-			</div>
-		<?php endif; ?>
-		<?php
-	}
-);
 
 /**
  * Удалить у стандартных постов ненужные метабоксы
