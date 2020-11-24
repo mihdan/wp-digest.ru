@@ -1,0 +1,13 @@
+.entry-related {
+  margin-top: 0 !important;
+}
+
+.entry-related-inner-content {
+  padding: 0 !important;
+}
+
+@media (max-width : 544px) {
+  .entry-related-inner-content {
+    padding: 0 1.5rem !important;
+  }
+}
