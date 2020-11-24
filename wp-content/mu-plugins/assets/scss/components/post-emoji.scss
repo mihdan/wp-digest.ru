@@ -1,4 +1,26 @@
-.emoji-container .emoji-emotion-icon {
-  width: 42px !important;
-  height: 42px !important;
+.emoji-container {
+  justify-content: left !important;
+  width: auto !important;
+  max-width: none !important;
+
+  .emoji-emotion {
+    flex-basis: auto !important;
+  }
+
+  .emoji-emotion-icon {
+    width: 30px !important;
+    height: 30px !important;
+  }
+  .emoji-emotion-label {
+    font-size: 1.5rem !important;
+  }
+}
+
+@media (max-width : 544px) {
+  .emoji-container {
+    .emoji-emotion-icon {
+      width: 42px !important;
+      height: 42px !important;
+    }
+  }
 }
