@@ -20,7 +20,7 @@ class Taxonomy {
 	public function register_taxonomy() {
 		register_taxonomy(
 			self::CATEGORY,
-			[ CPT::NAME ],
+			[ CPT::NAME_VACANCY, CPT::NAME_RESUME ],
 			[
 				'labels'                => [
 					'name'              => __( 'Categories', 'wp-digest' ),
@@ -45,7 +45,7 @@ class Taxonomy {
 
 		register_taxonomy(
 			self::TAG,
-			[ CPT::NAME ],
+			[ CPT::NAME_VACANCY, CPT::NAME_RESUME ],
 			[
 				'labels'                => [
 					'name'              => __( 'Tags', 'wp-digest' ),

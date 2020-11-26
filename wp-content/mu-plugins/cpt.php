@@ -6,7 +6,9 @@
 namespace Mihdan\WP_Digest;
 
 class CPT {
-	const NAME = 'job';
+	const NAME_VACANCY = 'vacancy';
+	const NAME_RESUME  = 'resume';
+
 	public function __construct() {
 		$this->hooks();
 	}
@@ -17,21 +19,25 @@ class CPT {
 	}
 
 	public function register_post_type() {
+
+		add_rewrite_rule( 'vacancies/([0-9]+)?$', 'index.php?post_type=vacancy&p=$matches[1]', 'top' );
+		add_rewrite_rule( 'resume/([0-9]+)?$', 'index.php?post_type=resume&p=$matches[1]', 'top' );
+
 		register_post_type(
-			self::NAME,
+			self::NAME_VACANCY,
 			array(
 				'labels'             => array(
-					'name'               => __( 'Jobs', 'wp-digest' ),
-					'singular_name'      => __( 'Jobs', 'wp-digest' ),
+					'name'               => __( 'Vacancies', 'wp-digest' ),
+					'singular_name'      => __( 'Vacancies', 'wp-digest' ),
 					'add_new'            => __( 'Add new', 'wp-digest' ),
-					'add_new_item'       => __( 'Add new job', 'wp-digest' ),
-					'edit_item'          => __( 'Edit job', 'wp-digest' ),
-					'new_item'           => __( 'New job', 'wp-digest' ),
-					'view_item'          => __( 'View job', 'wp-digest' ),
+					'add_new_item'       => __( 'Add new vacancy', 'wp-digest' ),
+					'edit_item'          => __( 'Edit vacancy', 'wp-digest' ),
+					'new_item'           => __( 'New vacancy', 'wp-digest' ),
+					'view_item'          => __( 'View vacancy', 'wp-digest' ),
 					'search_items'       => __( 'Search', 'wp-digest' ),
-					'not_found'          => __( 'Jobs not found', 'wp-digest' ),
-					'not_found_in_trash' => __( 'Jobs not found', 'wp-digest' ),
-					'menu_name'          => __( 'Jobs', 'wp-digest' ),
+					'not_found'          => __( 'Vacancies not found', 'wp-digest' ),
+					'not_found_in_trash' => __( 'Vacancies not found', 'wp-digest' ),
+					'menu_name'          => __( 'Vacancies', 'wp-digest' ),
 
 				),
 				'public'             => true,
@@ -40,28 +46,61 @@ class CPT {
 				'show_in_menu'       => true,
 				'show_in_rest'       => true,
 				'query_var'          => true,
-				'rewrite'            => [
-					'slug'       => 'jobs/%job_category%',
-					'with_front' => false
-				],
+				'rewrite'            => true,
 				'capability_type'    => 'post',
-				'has_archive'        => 'jobs',
+				'has_archive'        => 'vacancies',
 				'feeds'              => true,
 				'hierarchical'       => false,
 				'menu_position'      => 5,
-				'menu_icon'          => 'dashicons-businessman',
+				'menu_icon'          => 'dashicons-groups',
+				'supports'           => array( 'title','editor', 'author', 'thumbnail', 'comments' )
+			)
+		);
+
+		register_post_type(
+			self::NAME_RESUME,
+			array(
+				'labels'             => array(
+					'name'               => __( 'Resume', 'wp-digest' ),
+					'singular_name'      => __( 'Resume', 'wp-digest' ),
+					'add_new'            => __( 'Add new', 'wp-digest' ),
+					'add_new_item'       => __( 'Add new resume', 'wp-digest' ),
+					'edit_item'          => __( 'Edit resume', 'wp-digest' ),
+					'new_item'           => __( 'New resume', 'wp-digest' ),
+					'view_item'          => __( 'View resume', 'wp-digest' ),
+					'search_items'       => __( 'Search', 'wp-digest' ),
+					'not_found'          => __( 'Resume not found', 'wp-digest' ),
+					'not_found_in_trash' => __( 'Resume not found', 'wp-digest' ),
+					'menu_name'          => __( 'Resume', 'wp-digest' ),
+
+				),
+				'public'             => true,
+				'publicly_queryable' => true,
+				'show_ui'            => true,
+				'show_in_menu'       => true,
+				'show_in_rest'       => true,
+				'query_var'          => true,
+				'rewrite'            => true,
+				'capability_type'    => 'post',
+				'has_archive'        => 'resume',
+				'feeds'              => true,
+				'hierarchical'       => false,
+				'menu_position'      => 6,
+				'menu_icon'          => 'dashicons-id-alt',
 				'supports'           => array( 'title','editor', 'author', 'thumbnail', 'comments' )
 			)
 		);
 	}
 
 	public function post_type_link( $post_link, \WP_Post $post ) {
-		if ( is_object( $post ) && self::NAME === $post->post_type ){
-			$terms = wp_get_object_terms( $post->ID, Taxonomy::CATEGORY );
-			if( $terms ){
-				return str_replace( '%job_category%' , $terms[0]->slug , $post_link );
-			}
+		if ( is_object( $post ) && self::NAME_RESUME === $post->post_type ){
+			return home_url( 'resume/' . $post->ID );
 		}
+
+		if ( is_object( $post ) && self::NAME_VACANCY === $post->post_type ){
+			return home_url( 'vacancies/' . $post->ID );
+		}
+
 		return $post_link;
 	}
 }
