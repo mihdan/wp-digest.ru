@@ -1,8 +1,28 @@
+.wp-block-buttons {
+    &--actions {
+        .wp-block-button__link {
+            &--more {
+                border: 2px solid var(--global-palette-btn-bg);
+            }
+        }
+    }
+}
+
 @media (max-width: 544px) {
-    .button {
+    .wp-block-button {
+
         &--more {
             display: block !important;
             text-align: center;
+
+            .wp-block-button__link {
+                display: block;
+            }
+        }
+
+        &--comments,
+        &--emoji {
+            display: none !important;
         }
     }
 }
