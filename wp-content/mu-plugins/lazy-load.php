@@ -1,4 +1,9 @@
 <?php
+/**
+ * Lazy Load via Lozad.js
+ */
+
+namespace Mihdan\WP_Digest;
 
 /**
  * Добавить атрибут srcset="placeholder...." к тумбочкам постов
@@ -12,7 +17,7 @@
  */
 add_filter(
 	'wp_get_attachment_image_attributes',
-	function ( $attr, \WP_Post $attachment, $size ) {// var_dump($size);
+	function ( $attr, \WP_Post $attachment, $size ) {
 		if ( ! did_action( 'begin_fetch_post_thumbnail_html' ) ) {
 			return $attr;
 		}
@@ -30,7 +35,6 @@ add_filter(
 add_filter(
 	'get_custom_logo_image_attributes',
 	function ( $attr ) {
-		//var_dump($attr);die;
 		return $attr;
 	}
 );
