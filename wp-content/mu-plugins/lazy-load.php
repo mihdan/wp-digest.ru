@@ -53,11 +53,11 @@ add_action(
 		<script>
             jQuery( function ( $ ) {
 
-                var mihdan_observer = lozad();
-                mihdan_observer.observe();
+                let mihdanObserver = lozad();
+                mihdanObserver.observe();
 
                 $( '#archive-container').on( 'append.infiniteScroll', function() {
-                    mihdan_observer.observe();
+                    mihdanObserver.observe();
                 } );
             } );
 		</script>
