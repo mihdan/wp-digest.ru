@@ -5,6 +5,7 @@
 namespace WP_Digest;
 
 use PHPMailer\PHPMailer\PHPMailer;
+use WP_Admin_Bar;
 
 define( 'TWENTYNINETEEN_CHILD_VERSION', '1.0' );
 
@@ -329,4 +330,45 @@ add_action(
         }
     }
 );
+
+/**
+ * Добавляет в админ-сайдбар ссылки на инструкции-шпаргалки.
+ * Меню создаётся классическим способом через админку.
+ */
+add_action( 'after_setup_theme', function () {
+	$title = 'Шпаргалки';
+	$slug  = 'admin-instructions';
+
+	register_nav_menu( $slug, $title );
+
+	add_action( 'admin_bar_menu', function ( WP_Admin_Bar $toolbar ) use ( $title, $slug ) {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return;
+		}
+
+		$items = wp_get_nav_menu_items( get_nav_menu_locations()[ $slug ] ?? false );
+
+		if ( ! $items ) {
+			return;
+		}
+
+		$toolbar->add_node( [
+			'id'    => $slug,
+			'title' => $title,
+		] );
+
+		foreach ( $items as $item ) {
+			$toolbar->add_node( [
+				'parent' => $slug,
+				'id'     => $slug . '-' . (int) $item->ID,
+				'title'  => esc_html( $item->title ),
+				'href'   => esc_url( $item->url ),
+				'meta'   => [
+					'target' => '_blank',
+				],
+			] );
+		}
+	}, 90 );
+
+} );
 // eof;
