@@ -18,6 +18,7 @@ Disallow: */comments
 Disallow: /trackback/
 Disallow: */trackback
 Allow: */uploads
+Allow: /?amp
 Allow: /feed/mihdan-yandex-turbo-feed/
 Allow: /*/*.js
 Allow: /*/*.css

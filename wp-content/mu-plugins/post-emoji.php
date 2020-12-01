@@ -9,7 +9,7 @@ add_action(
 	'kadence_single_after_inner_content',
 	function () {
 		if ( is_singular( [ 'post', 'job' ] ) ) {
-			echo apply_shortcodes( '[emoji]' );
+			echo '<div id="post-emoji">' . apply_shortcodes( '[emoji]' ) . '</div>';
 		}
 	}
 );

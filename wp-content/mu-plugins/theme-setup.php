@@ -226,6 +226,8 @@ add_filter( 'loginout', __NAMESPACE__ . '\add_nofollow_to_loginout' );
 
 /**
  * Добавить шеры от likely
+ *
+ * @param string $content Содержимое записи.
  */
 function add_likely( $content ) {
 
@@ -233,27 +235,28 @@ function add_likely( $content ) {
         return $content;
     }
 
-	if ( is_singular( 'post' ) ) {
-		//require_once 'template-parts/likely.php';
-		$url  = get_post_meta( get_the_ID(), 'post_source_url', true );
-		$text = get_post_meta( get_the_ID(), 'post_source_text', true );
+	if ( ! is_singular( 'post' ) ) {
+		return $content;
+    }
 
-		if ( ! $url ) {
-		    return $content;
-        }
+	//require_once 'template-parts/likely.php';
+    $url  = get_post_meta( get_the_ID(), 'post_source_url', true );
+    $text = $title = get_post_meta( get_the_ID(), 'post_source_text', true );
 
-		$url = add_query_arg( 'utm_source', 'wp-digest.com', $url );
+    if ( ! $url ) {
+        return $content;
+    }
 
-		if ( ! $text ) {
-			$text = parse_url( $url, PHP_URL_HOST );
+    $url = add_query_arg( 'utm_source', 'wp-digest.com', $url );
 
-			return $content . sprintf( '<p><a class="button button--more" href="%s" target="_blank" title="Читать далее на %s">Читать далее</a></p>', esc_url( $url ), esc_attr( $text ) );
-		}
+    if ( ! $text ) {
+        $text  = 'Читать далее';
+        $title = parse_url( $url, PHP_URL_HOST );
 
-		return $content . sprintf( '<p><a class="button button--more" href="%s" target="_blank" title="%s">%s</a></p>', esc_url( $url ), esc_attr( $text ), esc_attr( $text ) );
-	}
+        //return $content . sprintf( '<p><a class="button button--more" href="%s" target="_blank" title="Читать далее на %s">Читать далее</a></p>', esc_url( $url ), esc_attr( $text ) );
+    }
 
-	return $content;
+    return $content . sprintf( '<div class="wp-block-buttons wp-block-buttons--actions"><div class="wp-block-button wp-block-button--more"><a class="wp-block-button__link wp-block-button__link--more" href="%s" target="_blank" title="%s">%s</a></div><div class="wp-block-button is-style-outline wp-block-button--comments"><a href="#reply-title" class="wp-block-button__link button--comments icon-comment-alt">Оставить комментарий</a></div><div class="wp-block-button is-style-outline wp-block-button--emoji"><a href="#post-emoji" class="wp-block-button__link button--emoji">Оценить</a></div></div>', esc_url( $url ), esc_attr( $title ), esc_attr( $text ) );
 }
 add_filter( 'the_content', __NAMESPACE__ . '\add_likely', 1 );
 
