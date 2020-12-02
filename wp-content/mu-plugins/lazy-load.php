@@ -69,6 +69,6 @@ add_action(
 function get_srcset_placeholder() {
 	return sprintf(
 		'%1$s 370w, %1$s 600w, %1$s 1920w',
-		WPMU_PLUGIN_URL . '/assets/images/placeholder-gradient.svg'
+		WPMU_PLUGIN_URL . '/assets/images/img-placeholder.svg'
 	);
 }
