@@ -256,7 +256,7 @@ function add_likely( $content ) {
         //return $content . sprintf( '<p><a class="button button--more" href="%s" target="_blank" title="Читать далее на %s">Читать далее</a></p>', esc_url( $url ), esc_attr( $text ) );
     }
 
-    return $content . sprintf( '<div class="wp-block-buttons wp-block-buttons--actions"><div class="wp-block-button wp-block-button--more"><a class="wp-block-button__link wp-block-button__link--more" href="%s" target="_blank" title="%s">%s</a></div><div class="wp-block-button is-style-outline wp-block-button--comments"><a href="#reply-title" class="wp-block-button__link button--comments icon-comment-alt">Оставить комментарий</a></div><div class="wp-block-button is-style-outline wp-block-button--emoji"><a href="#post-emoji" class="wp-block-button__link button--emoji">Оценить</a></div></div>', esc_url( $url ), esc_attr( $title ), esc_attr( $text ) );
+    return $content . sprintf( '<div class="wp-block-buttons wp-block-buttons--actions"><div class="wp-block-button wp-block-button--more"><a class="wp-block-button__link wp-block-button__link--more" href="%s" target="_blank" title="%s">%s</a></div><div class="wp-block-button is-style-outline wp-block-button--comments"><a href="#reply-title" class="wp-block-button__link button--comments icon-comment-alt">Оставить комментарий</a></div><!--div class="wp-block-button is-style-outline wp-block-button--emoji"><a href="#post-emoji" class="wp-block-button__link button--emoji">Оценить</a></div--></div>', esc_url( $url ), esc_attr( $title ), esc_attr( $text ) );
 }
 add_filter( 'the_content', __NAMESPACE__ . '\add_likely', 1 );
 
