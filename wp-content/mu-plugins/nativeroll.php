@@ -27,14 +27,20 @@ add_action(
                     "SeedrPlayer", "seedrInit");
 			</script>
 			<script>
+                /**
+                 * @link https://v2.nativeroll.tv/static/nr_apidoc.pdf
+                 */
                 SeedrPlayer({
-                    container: '.single-entry',
+                    container: '.single-content',
                     article: '.single-content',
                     desiredOffset: 50,
                     gid: '5fc8ba6708780f6bba34fdfa',
                     category: 'Новости',
                     onError: function(e) {
-                        console.log( e );
+                        console.warn( e );
+                    },
+                    onLoad: function(e) {
+                        console.log( 'nativeroll ready' );
                     }
                 });
 			</script>
