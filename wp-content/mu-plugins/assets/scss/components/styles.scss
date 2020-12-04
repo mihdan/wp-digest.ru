@@ -19,3 +19,16 @@
         border: 1px solid #ccc;
     }
 }
+
+.videoWrapper {
+    position: relative;
+    margin-top: 2rem;
+
+    iframe {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+    }
+}
