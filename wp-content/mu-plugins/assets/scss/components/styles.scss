@@ -6,3 +6,16 @@
 //    0% { background-color: rgba(0,0,0,.1); }
 //    100% { background-color: rgba(0,0,0,0); }
 //}
+
+.wp-block-embed-youtube {
+    .wp-block-embed__wrapper:before {
+        padding: 0 !important;
+    }
+}
+
+.amalker {
+    min-height: 90px;
+    &--aside {
+        border: 1px solid #ccc;
+    }
+}
