@@ -166,6 +166,7 @@ function remove_toolbar_node( \WP_Admin_Bar $wp_admin_bar ) {
 	$wp_admin_bar->remove_node( 'comments' );
 	$wp_admin_bar->remove_node( 'wpseo-menu' );
 	$wp_admin_bar->remove_node( 'search' );
+	$wp_admin_bar->remove_node( 'ai-toolbar-settings' );
 }
 add_action( 'admin_bar_menu', __NAMESPACE__ . '\remove_toolbar_node', 999 );
 
@@ -253,8 +254,6 @@ function add_likely( $content ) {
     if ( ! $text ) {
         $text  = 'Читать далее';
         $title = parse_url( $url, PHP_URL_HOST );
-
-        //return $content . sprintf( '<p><a class="button button--more" href="%s" target="_blank" title="Читать далее на %s">Читать далее</a></p>', esc_url( $url ), esc_attr( $text ) );
     }
 
     return $content . sprintf( '<div class="wp-block-buttons wp-block-buttons--actions"><div class="wp-block-button wp-block-button--more"><a class="wp-block-button__link wp-block-button__link--more" href="%s" target="_blank" title="%s">%s</a></div><div class="wp-block-button is-style-outline wp-block-button--comments"><a href="#reply-title" class="wp-block-button__link button--comments icon-comment-alt">Оставить комментарий</a></div><!--div class="wp-block-button is-style-outline wp-block-button--emoji"><a href="#post-emoji" class="wp-block-button__link button--emoji">Оценить</a></div--></div>', esc_url( $url ), esc_attr( $title ), esc_attr( $text ) );
