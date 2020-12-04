@@ -39,6 +39,34 @@ class SEO {
 		 * Disable sitemap indexation.
 		 */
 		//add_action( 'the_seo_framework_sitemap_header', [ $this, 'header_noindex' ], 11 );
+
+		/**
+		 * Set custom description.
+		 */
+		add_filter( 'the_seo_framework_generated_description', [ $this, 'set_meta_description' ], 10, 2 );
+		add_filter( 'get_the_archive_description', [ $this, 'set_description' ] );
+	}
+
+	public function set_meta_description( $description, $args ) {
+
+		if ( null === $args && is_post_type_archive( 'post' ) ) {
+			//$description = 'My custom description';
+		}
+
+		if ( null === $args && is_archive() ) {
+			$description = sprintf( 'В этой рубрике мы расскажем про %s и всё, что с этим связано.', mb_convert_case( single_cat_title( '', false ), MB_CASE_LOWER ) );
+		}
+
+		return $description;
+	}
+
+	public function set_description( $description ) {
+
+		if ( is_archive() && empty( $description ) ) {
+			$description = sprintf( '<p>Самая полная информация про %s и как их применять в WordPress.</p>', mb_convert_case( single_cat_title( '', false ), MB_CASE_LOWER ) );
+		}
+
+		return $description;
 	}
 
 	public function noindex_feeds() {
