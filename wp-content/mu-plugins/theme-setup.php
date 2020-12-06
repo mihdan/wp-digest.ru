@@ -50,6 +50,8 @@ function setup_theme() {
 		'video',
 	);
 	add_theme_support( 'post-formats', $formats );
+
+	add_editor_style( plugins_url( 'assets/css/gutenberg.css', __FILE__ ) );
 }
 add_action( 'after_setup_theme', __NAMESPACE__ . '\setup_theme' );
 

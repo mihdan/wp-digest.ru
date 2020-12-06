@@ -14,6 +14,10 @@ const files = {
         src: ['assets/scss/app.scss'],
         watch: ['assets/scss/**/*.scss', 'assets/scss/app.scss']
     },
+    gutenberg_scss: {
+        src: ['assets/scss/gutenberg.scss'],
+        watch: [ 'assets/scss/**/*.scss', 'assets/scss/gutenberg.scss']
+    },
     //js: {
     //    src: ['assets/js/lib/*.js', 'assets/js/app.js'],
     //    watch: ['assets/js/lib/*.js', 'assets/js/app.js']
@@ -35,6 +39,17 @@ function stylesTask() {
         .pipe(livereload());
 }
 
+function gutenbergStylesTask() { console.log(files.gutenberg_scss.src);
+    return src(files.gutenberg_scss.src)
+        .pipe(sourcemaps.init())
+        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+        .pipe(autoprefixer())
+        .pipe(rename('assets/css/gutenberg.css'))
+        .pipe(sourcemaps.write('.'))
+        .pipe(dest('.'))
+        .pipe(livereload());
+}
+
 // function jsTask() {
 //     return src(files.js.src)
 //         .pipe(concat('app.min.js'))
@@ -51,6 +66,7 @@ function htmlTask() {
 function watchTask() {
     livereload.listen();
     watch(files.scss.watch, parallel(stylesTask));
+    watch(files.gutenberg_scss.watch, parallel(gutenbergStylesTask));
 //    watch(files.js.watch, parallel(jsTask));
     watch(files.html.watch, parallel(htmlTask));
 }
@@ -73,6 +89,7 @@ exports.watch = series(
 
 exports.default = series(
     stylesTask,
+    gutenbergStylesTask,
 //    jsTask,
     htmlTask
 );
