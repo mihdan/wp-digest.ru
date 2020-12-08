@@ -4,6 +4,27 @@
     margin-right: auto;
 }
 
+.comments {
+    &--telegram {
+        background-color: #fff;
+        padding: 2rem;
+    }
+}
+
 .comment-reply-title {
     margin-bottom: 1.5rem;
+}
+
+@media (max-width: 719px) {
+    .comments-area {
+        margin-left: -1rem;
+        margin-right: -1rem;
+        padding: 0 !important;
+    }
+
+    .comments {
+        &--telegram {
+            padding: 1rem;
+        }
+    }
 }

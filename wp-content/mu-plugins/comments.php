@@ -17,12 +17,14 @@ add_action(
 			: 'wordpress_jobs';
 
 		?>
-		<h3 id="reply-title" class="comment-reply-title">Добавить комментарий</h3>
-		<script async
-		        src="https://telegram.org/js/telegram-widget.js?14"
-		        data-telegram-discussion="<?php echo esc_attr( $channel ); ?>"
-		        data-comments-limit="20"
-		        data-colorful="1"></script>
+        <div class="comments comments--telegram">
+            <h2 id="reply-title" class="comment-reply-title">Добавить комментарий</h2>
+            <script async
+                    src="https://telegram.org/js/telegram-widget.js?14"
+                    data-telegram-discussion="<?php echo esc_attr( $channel ); ?>"
+                    data-comments-limit="20"
+                    data-colorful="1"></script>
+        </div>
 		<?php
 	},
 	12
