@@ -6,7 +6,7 @@
 namespace Mihdan\WP_Digest;
 
 add_action(
-	'kadence_single_after_inner_content',
+	'kadence_single_after_inner_content___',
 	function () {
 		if ( is_singular( [ 'post', 'job' ] ) ) {
 			echo '<div id="post-emoji">' . apply_shortcodes( '[emoji]' ) . '</div>';
