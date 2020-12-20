@@ -11,7 +11,6 @@ Disallow: */feed
 Disallow: */rss
 Disallow: */embed
 Disallow: */page/
-Disallow: */tag/
 Disallow: /xmlrpc.php
 Disallow: */comment
 Disallow: */comments
