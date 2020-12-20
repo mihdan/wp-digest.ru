@@ -1,13 +1,25 @@
 .comments-area {
-    margin-top: var(--global-xl-spacing);
+    margin-top: 2rem;
     margin-left: auto;
     margin-right: auto;
+    background-color: #fff;
+    padding-top: 2rem;
+    padding-bottom: 2rem !important;
+}
+
+#wpdcom {
+    &:before {
+        content: 'Комментарии';
+        display: block;
+        font-size: 26px;
+    }
 }
 
 .comments {
     &--telegram {
         background-color: #fff;
         padding: 2rem;
+        min-height: 330px;
     }
 }
 
@@ -16,10 +28,10 @@
 }
 
 @media (max-width: 719px) {
-    .comments-area {
-        margin-left: -1rem;
-        margin-right: -1rem;
-        padding: 0 !important;
+    #comments {
+        margin-left: -1rem !important;
+        margin-right: -1rem !important;
+        //padding: 0 !important;
     }
 
     .comments {

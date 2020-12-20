@@ -8,13 +8,19 @@ namespace Mihdan\WP_Digest;
 add_action(
 	'kadence_before_comments',
 	function () {
-		if ( ! is_singular( [ 'post', 'page', 'vacancy', 'resume' ] ) ) {
+		if ( ! is_singular( [ 'post', 'page', 'vacancy', 'resume', 'recommendations' ] ) ) {
 			return;
 		}
 
-		$channel = is_singular( [ 'post', 'page' ] )
+		$channel = is_singular( [ 'post', 'page', 'recommendations' ] )
 			? 'wordpress_digest'
 			: 'wordpress_jobs';
+
+		$telegram_url = get_post_meta( get_the_ID(), 'post_telegram_url', true );
+
+        if ( ! empty( $telegram_url ) ) {
+            $channel = str_replace( 'https://t.me/', '', $telegram_url );
+        }
 
 		?>
         <div class="comments comments--telegram">
@@ -42,7 +48,7 @@ add_action(
 add_action(
 	'kadence_after_entry_meta',
 	function () {
-	    if ( ! is_singular( [ 'post', 'vacancy', 'resume' ] ) ) {
+	    if ( ! is_singular( [ 'post', 'vacancy', 'resume', 'recommendations' ] ) ) {
 	        return;
         }
 		?>
