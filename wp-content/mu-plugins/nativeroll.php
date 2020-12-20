@@ -7,8 +7,8 @@ namespace Mihdan\WP_Digest;
 
 add_action(
 	'wp_footer',
-	function () {
-		//if ( is_singular( 'post' ) || is_home() ) {
+	function () { return;
+		if ( is_singular( 'post' ) ) {
 			?>
 			<script type="text/javascript">
                 (function (a, b, c, d, e, f, g, h) {
@@ -45,6 +45,6 @@ add_action(
                 });
 			</script>
 			<?php
-		//}
+		}
 	}
 );
