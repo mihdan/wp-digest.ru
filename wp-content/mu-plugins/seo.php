@@ -35,6 +35,8 @@ class SEO {
 		 */
 		add_action( 'wp_head', [ $this, 'disable_feed_links' ], 1 );
 
+		add_action( 'wp_head', [ $this, 'add_telegram_channel_link' ] );
+
 		/**
 		 * Disable sitemap indexation.
 		 */
@@ -45,6 +47,12 @@ class SEO {
 		 */
 		add_filter( 'the_seo_framework_generated_description', [ $this, 'set_meta_description' ], 10, 2 );
 		add_filter( 'get_the_archive_description', [ $this, 'set_description' ] );
+	}
+
+	public function add_telegram_channel_link() {
+		?>
+		<meta property="telegram:channel" content="@wordpress_digest" />
+		<?php
 	}
 
 	public function set_meta_description( $description, $args ) {
