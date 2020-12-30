@@ -3,7 +3,7 @@
  * WPScan informer.
  */
 
-namespace Mihdan\WP_Digest;
+namespace Mihdan\Kadence_Child;
 
 class WPScan {
 	private const TRANSIENT = 'wpscan';
@@ -23,11 +23,9 @@ class WPScan {
 	 */
 	public function __construct( string $token ) {
 		$this->token = $token;
-
-		$this->hooks();
 	}
 
-	public function hooks() {
+	public function setup_hooks() {
 		add_shortcode( 'wpscan', [ $this, 'render_shortcode' ] );
 	}
 
@@ -92,5 +90,3 @@ class WPScan {
 	}
 
 }
-
-new WPScan( WPSCAN_TOKEN );
