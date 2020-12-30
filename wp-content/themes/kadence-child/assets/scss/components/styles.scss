@@ -1,0 +1,224 @@
+//:target {
+//    animation: target-fade 3s 1;
+//}
+//
+//@keyframes target-fade {
+//    0% { background-color: rgba(0,0,0,.1); }
+//    100% { background-color: rgba(0,0,0,0); }
+//}
+
+.wp-block-embed-youtube {
+    .wp-block-embed__wrapper:before {
+        padding: 0 !important;
+    }
+}
+
+.amalker {
+    min-height: 90px;
+    position: relative;
+
+    &:before {
+        content: "Реклама";
+        position: absolute;
+        width: 100%;
+        height: 30px;
+        bottom: 0;
+        font-size: 12px;
+        color: #999;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 3px;
+    }
+
+    &--aside {
+        border: 1px solid #ccc;
+    }
+}
+
+.videoWrapper {
+    position: relative;
+    margin-top: 2rem;
+
+    iframe {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.site {
+    .post-thumbnail {
+        padding-bottom: 56.25% !important;
+    }
+}
+
+.read-more {
+    &--post {
+        float: left;
+    }
+}
+
+.kt_simple_share_container {
+    float: right;
+    padding-top: 15px !important;
+    a {
+        border-radius: 0 !important;
+        border: 0 !important;
+    }
+}
+
+.entry-tags {
+    a.tag-link {
+        padding: 0 0 0 18px !important;
+        border: 0 !important;
+        color: var(--global-palette-highlight) !important;
+        background: url("../images/tag.svg") no-repeat left center;
+        margin-right: 0.7em !important;
+
+        .tag-hash {
+            display: none;
+        }
+
+        &:hover {
+            background: url("../images/tag.svg") no-repeat left center !important;
+            color: var(--global-palette-highlight) !important;
+        }
+    }
+}
+
+.subscribe-widget {
+    background-image: linear-gradient(100deg,#f26798 0%,#3023ae 100%);
+    padding: 30px 100px;
+    border-radius: 2px;
+    color: #fff;
+    font-size: 16px;
+    //margin-bottom: 2rem;
+    margin-top: 2rem;
+}
+
+.subscribe-widget__heading {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.subscribe-widget__form {
+    display: flex;
+    align-items: center;
+}
+
+.subscribe-widget__email {
+    height: 40px;
+    line-height: 40px;
+    padding: 0 15px;
+    border: 0;
+    background: #fff;
+    flex: 1 0 auto;
+    //max-width: 220px;
+}
+.subscribe-widget__button {
+    height: 40px;
+    line-height: 40px;
+    padding: 0 15px;
+    border: 0;
+    background: #65d49a;
+    color: #fff;
+    width: 140px;
+}
+
+.subscribe-widget__terms {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 0;
+}
+
+@media (max-width : 544px) {
+    .subscribe-widget {
+        padding: 20px 20px;
+        margin-left: -20px;
+        margin-right: -20px;
+    }
+
+    .subscribe-widget__heading {
+        font-size: 28px;
+    }
+
+    .subscribe-widget__email {
+        width: 60%;
+    }
+
+    .subscribe-widget__button {
+        width: 40%;
+    }
+}
+
+.widget {
+    position: relative;
+
+    &-title {
+        border-bottom: 2px solid #333;
+        text-transform: inherit !important;
+        font-size: 14px !important;
+        font-weight: normal !important;
+        color: #fff !important;
+        margin-bottom: 15px;
+
+        &__wrapper {
+            background-color: #333;
+            display: inline-block;
+            padding: 4px 10px;
+        }
+    }
+
+    > ul {
+        margin-left: 10px !important;
+    }
+
+    &.widget_recent_entries,
+    &.pageviews-widget {
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        li {
+            font-size: 14px;
+            line-height: 1.5em;
+            margin-bottom: 0.5em !important;
+        }
+        .post-date {
+            font-size: 11px;
+            color: #b5b5b5;
+            display: block;
+        }
+    }
+}
+
+.entry-meta {
+    position: relative;
+}
+.home .pageviews,
+.archive .pageviews {
+    //position: absolute;
+    //right: 0;
+}
+
+.loop-entry {
+    position: relative;
+
+    .entry-content-wrap {
+        padding-bottom: 4rem !important;
+    }
+}
+.archive .entry-footer,
+.home .entry-footer {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+}
