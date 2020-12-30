@@ -33,7 +33,7 @@ function stylesTask() {
         .pipe(sourcemaps.init())
         .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
         .pipe(autoprefixer())
-        .pipe(rename('assets/css/app.css'))
+        .pipe(rename('assets/styles/app.css'))
         .pipe(sourcemaps.write('.'))
         .pipe(dest('.'))
         .pipe(livereload());
@@ -44,7 +44,7 @@ function gutenbergStylesTask() { console.log(files.gutenberg_scss.src);
         .pipe(sourcemaps.init())
         .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
         .pipe(autoprefixer())
-        .pipe(rename('assets/css/gutenberg.css'))
+        .pipe(rename('assets/styles/gutenberg.css'))
         .pipe(sourcemaps.write('.'))
         .pipe(dest('.'))
         .pipe(livereload());

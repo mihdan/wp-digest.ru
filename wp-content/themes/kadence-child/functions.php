@@ -17,8 +17,6 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	( new Main( new Injector() ) )->init();
 }
 
-define( 'TWENTYNINETEEN_CHILD_VERSION', '1.0' );
-
 /**
  * Настройки темы
  */
@@ -34,12 +32,12 @@ function setup_theme() {
 	add_theme_support( 'title-tag' );
 
 	// Включаем поддержку AMP
-	add_theme_support(
-		'amp',
-		array(
-			'comments_live_list' => true,
-		)
-	);
+	//add_theme_support(
+	//	'amp',
+	//	array(
+	//		'comments_live_list' => true,
+	//	)
+	//);
 
 	// Влючаем поддуржку темой HTML5
 	add_theme_support(
@@ -61,7 +59,7 @@ function setup_theme() {
 	);
 	add_theme_support( 'post-formats', $formats );
 
-	add_editor_style( plugins_url( 'assets/css/gutenberg.css', __FILE__ ) );
+	add_editor_style( get_theme_file_uri( 'assets/styles/gutenberg.css' ) );
 }
 add_action( 'after_setup_theme', __NAMESPACE__ . '\setup_theme' );
 
@@ -69,9 +67,8 @@ add_action( 'after_setup_theme', __NAMESPACE__ . '\setup_theme' );
  * Подключаем зависимые стили и скрипты
  */
 function enqueue_assets() {
-	//wp_enqueue_style( 'twentynineteen', get_template_directory_uri() . '/style.css', array(), TWENTYNINETEEN_CHILD_VERSION );
 	//wp_enqueue_style('kadence', get_template_directory_uri() .'/style.css' );
-	wp_enqueue_style( 'app', get_theme_file_uri( 'assets/css/app.css' ), array(), filemtime( get_theme_file_path( 'assets/css/app.css' ) ) );
+	wp_enqueue_style( 'app', get_theme_file_uri( 'assets/styles/app.css' ), array(), filemtime( get_theme_file_path( 'assets/styles/app.css' ) ) );
 }
 add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\enqueue_assets', 11 );
 
