@@ -12,7 +12,7 @@ class ACF {
 	public function __construct() {
 	}
 
-	public function hooks() {
+	public function setup_hooks() {
 		add_filter( 'acf/settings/save_json', array( $this, 'save_json' ) );
 		add_filter( 'acf/settings/load_json', array( $this, 'load_json' ) );
 	}

@@ -12,7 +12,7 @@ class CPT {
 
 	public function __construct() {}
 
-	public function hooks() {
+	public function setup_hooks() {
 		add_action( 'init', [ $this, 'register_post_type' ] );
 		add_filter( 'post_type_link', [ $this, 'post_type_link' ], 1, 2 );
 	}
