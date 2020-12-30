@@ -3,16 +3,15 @@
  * SEO Settings.
  */
 
-namespace Mihdan\WP_Digest;
+namespace Mihdan\Kadence_Child;
 
 use WP;
 
 class SEO {
 	public function __construct() {
-		$this->hooks();
 	}
 
-	public function hooks() {
+	public function setup_hooks() {
 		/**
 		 * Отключить ссылку на wp.org в виджете "Мета".
 		 */
@@ -94,7 +93,3 @@ class SEO {
 		}
 	}
 }
-
-new SEO();
-
-// eol.

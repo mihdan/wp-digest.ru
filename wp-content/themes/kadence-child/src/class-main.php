@@ -30,5 +30,6 @@ class Main {
 		( $this->injector->make( Performance::class ) )->setup_hooks();
 		( $this->injector->make( Lazy_Load::class ) )->setup_hooks();
 		( $this->injector->make( CF7::class ) )->setup_hooks();
+		( $this->injector->make( SEO::class ) )->setup_hooks();
 	}
 }
