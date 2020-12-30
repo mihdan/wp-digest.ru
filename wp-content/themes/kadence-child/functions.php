@@ -1,6 +1,8 @@
 <?php
 namespace Mihdan\Kadence_Child;
 
+use PHPMailer\PHPMailer\PHPMailer;
+use WP_Admin_Bar;
 use Auryn\Injector;
 
 // @codeCoverageIgnoreStart
@@ -14,9 +16,6 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 
 	( new Main( new Injector() ) )->init();
 }
-
-use PHPMailer\PHPMailer\PHPMailer;
-use WP_Admin_Bar;
 
 define( 'TWENTYNINETEEN_CHILD_VERSION', '1.0' );
 
@@ -71,14 +70,10 @@ add_action( 'after_setup_theme', __NAMESPACE__ . '\setup_theme' );
  */
 function enqueue_assets() {
 	//wp_enqueue_style( 'twentynineteen', get_template_directory_uri() . '/style.css', array(), TWENTYNINETEEN_CHILD_VERSION );
-	wp_enqueue_style( 'app', plugins_url( 'assets/css/app.css', __FILE__ ), array(), filemtime( plugin_dir_path( __FILE__ ) . 'assets/css/app.css' ) );
-
-	if ( is_single() ) {
-		//wp_enqueue_style( 'likely', plugins_url( 'assets/css/likely.css', __FILE__ ), array(), TWENTYNINETEEN_CHILD_VERSION );
-		//wp_enqueue_script( 'likely', plugins_url( 'assets/js/likely.js', __FILE__ ), array(), TWENTYNINETEEN_CHILD_VERSION, true );
-	}
+	//wp_enqueue_style('kadence', get_template_directory_uri() .'/style.css' );
+	wp_enqueue_style( 'app', get_theme_file_uri( 'assets/css/app.css' ), array(), filemtime( get_theme_file_path( 'assets/css/app.css' ) ) );
 }
-add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\enqueue_assets' );
+add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\enqueue_assets', 11 );
 
 /**
  * Добавить тумбочки к RSS
