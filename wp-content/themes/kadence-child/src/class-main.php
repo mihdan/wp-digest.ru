@@ -32,5 +32,6 @@ class Main {
 		( $this->injector->make( CF7::class ) )->setup_hooks();
 		( $this->injector->make( SEO::class ) )->setup_hooks();
 		( $this->injector->make( Subscription::class ) )->setup_hooks();
+		( $this->injector->make( Syntax_Highlighter::class ) )->setup_hooks();
 	}
 }
