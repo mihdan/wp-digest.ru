@@ -3,7 +3,7 @@
  * Plugin Name: Mihdan: Pageviews
  */
 
-namespace Mihdan\WP_Digest;
+namespace Mihdan\Kadence_Child;
 
 class Pageviews {
     public function setup_hooks() {
@@ -22,9 +22,3 @@ class Pageviews {
 	    return 99;
     }
 }
-
-( new Pageviews() )->setup_hooks();
-
-
-
-
