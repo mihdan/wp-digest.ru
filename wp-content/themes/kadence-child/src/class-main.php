@@ -25,5 +25,8 @@ class Main {
 		( $this->injector->make( Taxonomy::class ) )->setup_hooks();
 		( $this->injector->make( ACF::class ) )->setup_hooks();
 		( $this->injector->make( Comments::class ) )->setup_hooks();
+		( $this->injector->make( Related_Posts::class ) )->setup_hooks();
+		( $this->injector->make( Pageviews::class ) )->setup_hooks();
+		( $this->injector->make( Performance::class ) )->setup_hooks();
 	}
 }
