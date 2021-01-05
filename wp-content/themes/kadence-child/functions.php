@@ -4,6 +4,7 @@ namespace Mihdan\Kadence_Child;
 use PHPMailer\PHPMailer\PHPMailer;
 use WP_Admin_Bar;
 use Auryn\Injector;
+use function Kadence\kadence;
 
 // @codeCoverageIgnoreStart
 if ( ! defined( 'ABSPATH' ) ) {
@@ -452,14 +453,38 @@ add_action(
 
 
 add_filter(
-	'previous_post_link_',
-	function( $output, $format, $link, $post, $adjacent ){
-//        print_r($output);
+	'previous_post_link',
+	function( $output, $format, $link, $post, $adjacent ) {
 
-		$thumbnail = get_the_post_thumbnail_url( $post );
+		$thumbnail = get_the_post_thumbnail_url( $post, 'medium' );
+		$output    = str_replace( '%thumbnail', $thumbnail, $output );
 
-		return $output . $thumbnail;
+		return $output;
 	},
 	10,
 	5
+);
+
+add_filter(
+	'next_post_link',
+	function( $output, $format, $link, $post, $adjacent ) {
+
+		$thumbnail = get_the_post_thumbnail_url( $post, 'medium' );
+		$output    = str_replace( '%thumbnail', $thumbnail, $output );
+
+		return $output;
+	},
+	10,
+	5
+);
+
+add_filter(
+    'kadence_post_navigation_args',
+    function ( $args ) {
+
+        return array(
+	        'prev_text' => '<div class="post-navigation-sub post-navigation-sub--prev"><small>' . kadence()->get_icon( 'arrow-left' ) . esc_html__( 'Previous', 'kadence' ) . '</small></div><div class="post-navigation-prev"><div class="post-navigation-prev__title">%title</div><div class="post-navigation-prev__thumbnail"><img src="%thumbnail" alt="" width="106" height="60" class="post-navigation-prev__img" /></div></div>',
+	        'next_text' => '<div class="post-navigation-sub post-navigation-sub--next"><small>' . esc_html__( 'Next', 'kadence' ) . kadence()->get_icon( 'arrow-right' ) . '</small></div><div class="post-navigation-next"><div class="post-navigation-next__title">%title</div><div class="post-navigation-next__thumbnail"><img src="%thumbnail" alt="" width="106" height="60" class="post-navigation-next__img" /></div></div>',
+        );
+    }
 );
