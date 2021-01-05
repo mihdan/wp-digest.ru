@@ -2,7 +2,7 @@
 
 # Публичный репозиторий сайта
 
-- Адрес сайта - [wp-digest.ru](https://wp-digest.ru)
+- Адрес сайта - [wp-digest.com](https://wp-digest.com)
 
 ## Контрибьюторы
 
