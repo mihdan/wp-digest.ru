@@ -488,3 +488,29 @@ add_filter(
         );
     }
 );
+
+/*
+тут нет пагинации, Рубрик и Меток, потому что в моей реализации это должно быть открыто
++ нужно ещё закрыть в X-Robots-Tag фиды
+
+*/
+function wp_digest_true_meta_robots () {
+if (
+  get_query_var('cpage')
+	//or is_feed () это через X-Robots-Tag
+	or is_author()
+	or is_date()
+	or is_day()
+	or is_month()
+	or is_year()
+	or is_tax()
+	or is_attachment()
+	or is_search() 
+or (substr_count($_SERVER['REQUEST_URI'], '/?search'))
+//or (substr_count($_SERVER['REQUEST_URI'], '/rss')) это редиректит на feed	
+) 
+{
+echo "".'<meta name="robots" content="noindex, follow">'."\n";  
+}  
+}
+add_action('wp_head', 'wp_digest_true_meta_robots'); 
