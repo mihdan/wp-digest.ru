@@ -74,31 +74,6 @@ function enqueue_assets() {
 add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\enqueue_assets', 11 );
 
 /**
- * Добавить тумбочки к RSS
- *
- * @param $content
- * @return string
- */
-function rss_post_excerpt_thumbnail( $content ) {
-	global $post;
-
-	$extended = get_extended( $post->post_content );
-
-	if ( ! empty( $extended['main'] ) ) {
-		$content = do_blocks( $extended['main'] );
-
-		if ( has_post_thumbnail( $post->ID ) ) {
-			$content = '<p>' . get_the_post_thumbnail( $post->ID, 'full' ) . '</p>' . $content;
-		}
-
-		return $content;
-	}
-
-	return $content;
-}
-add_filter( 'the_excerpt_rss', __NAMESPACE__ . '\rss_post_excerpt_thumbnail' );
-
-/**
  * Если в результате поиска нашелся всего один пост - редиректим на него
  */
 function search_redirect() {

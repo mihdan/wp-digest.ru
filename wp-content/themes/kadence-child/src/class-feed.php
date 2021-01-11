@@ -19,7 +19,20 @@ class Feed {
 
 	public function add_tags( $content ) {
 
-		$tags = wp_get_post_terms( get_the_ID(), 'post_tag', [ 'fields' => 'names' ] );
+		$thumbnail = '';
+		$post      = get_post();
+		$extended  = get_extended( $post->post_content );
+
+		// Обложка записи.
+		if ( ! empty( $extended['main'] ) ) {
+			$content = do_blocks( $extended['main'] );
+
+			if ( has_post_thumbnail( $post->ID ) ) {
+				$thumbnail = '<p>' . get_the_post_thumbnail( $post->ID, 'full' ) . '</p>';
+			}
+		}
+
+		$tags = wp_get_post_terms( $post->ID, 'post_tag', [ 'fields' => 'names' ] );
 		$tags = array_map(
 			function ( $tag ) {
 				return $this->convert_text_to_hashtag( $tag );
@@ -28,12 +41,17 @@ class Feed {
 		);
 
 		if ( ! $tags ) {
-			return $content;
+			return $thumbnail . $content;
 		}
 
-		$content .= '<p>' . esc_attr( '#' . implode( ' #', $tags ) ) . '</p>';
+		$tags = '<p>' . esc_attr( '#' . implode( ' #', $tags ) ) . '</p>';
 
-		return $content;
+		// Для Твиттера постим только теги без описания.
+		if ( ! empty( $_GET['provider'] ) && 'twitter' === $_GET['provider'] ) {
+			return $thumbnail . $tags;
+		}
+
+		return $thumbnail . $content . $tags;
 	}
 
 	public function convert_text_to_hashtag( $text ) {
