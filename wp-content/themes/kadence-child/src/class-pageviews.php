@@ -19,6 +19,6 @@ class Pageviews {
 	}
 
     public function show_placeholder() {
-	    return 99;
+	    return '&hellip;';
     }
 }
