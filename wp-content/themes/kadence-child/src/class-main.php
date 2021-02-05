@@ -2,6 +2,8 @@
 namespace Mihdan\Kadence_Child;
 
 use Auryn\Injector;
+use Auryn\ConfigException;
+use Auryn\InjectionException;
 
 class Main {
 	/**
@@ -20,20 +22,49 @@ class Main {
 		$this->injector = $injector;
 	}
 
+	/**
+	 * Init theme.
+	 *
+	 * @throws InjectionException If a cyclic gets detected when provisioning.
+	 * @throws ConfigException If $nameOrInstance is not a string or an object.
+	 */
 	public function init() {
-		( $this->injector->make( CPT::class ) )->setup_hooks();
-		( $this->injector->make( Taxonomy::class ) )->setup_hooks();
-		( $this->injector->make( ACF::class ) )->setup_hooks();
-		( $this->injector->make( Comments::class ) )->setup_hooks();
-		( $this->injector->make( Related_Posts::class ) )->setup_hooks();
-		( $this->injector->make( Pageviews::class ) )->setup_hooks();
-		( $this->injector->make( Performance::class ) )->setup_hooks();
-		( $this->injector->make( Lazy_Load::class ) )->setup_hooks();
-		( $this->injector->make( CF7::class ) )->setup_hooks();
-		( $this->injector->make( SEO::class ) )->setup_hooks();
-		( $this->injector->make( Subscription::class ) )->setup_hooks();
-		( $this->injector->make( Syntax_Highlighter::class ) )->setup_hooks();
-		( $this->injector->make( Feed::class ) )->setup_hooks();
-		( $this->injector->make( WPScan::class, [ WPSCAN_TOKEN ] ) )->setup_hooks();
+		foreach ( [
+			CPT::class,
+			Taxonomy::class,
+			ACF::class,
+			Comments::class,
+			Related_Posts::class,
+			Pageviews::class,
+			Performance::class,
+			Lazy_Load::class,
+			CF7::class,
+			SEO::class,
+			Subscription::class,
+			Syntax_Highlighter::class,
+			Feed::class,
+		] as $class_name ) {
+			( $this->make( $class_name ) )->setup_hooks();
+		}
+		
+		( $this->make( WPScan::class, [ WPSCAN_TOKEN ] ) )->setup_hooks();
+	}
+	
+	/**
+	 * Make a class from DIC.
+	 *
+	 * @param string $class_name Full class name.
+	 * @param array  $args	     List of arguments.
+	 *
+	 * @return mixed
+	 *
+	 * @throws InjectionException If a cyclic gets detected when provisioning.
+	 * @throws ConfigException If $nameOrInstance is not a string or an object.
+	 */
+	public function make( string $class_name, array $args = [] ) {
+
+		$this->injector->share( $class_name );
+
+		return $this->injector->make( $class_name, $args );
 	}
 }
