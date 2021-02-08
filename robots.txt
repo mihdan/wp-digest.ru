@@ -25,6 +25,12 @@ Allow: /wp-*.png
 Allow: /wp-*.jpg
 Allow: /wp-*.jpeg
 Allow: /wp-*.gif
+Allow: /wp-*.webp
+Allow: /wp-*.webm
+Allow: /wp-*.svg
+Allow: /wp-*.ttf
+Allow: /wp-*.woff
+Allow: /wp-*.woff2
 User-agent: YandexNews
 Allow: /feed/mihdan-yandex-news-feed/
 Host: https://wp-digest.com
