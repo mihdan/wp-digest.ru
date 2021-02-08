@@ -40,7 +40,7 @@ class Main {
 			Lazy_Load::class,
 			CF7::class,
 			SEO::class,
-			Subscription::class,
+			//Subscription::class,
 			Syntax_Highlighter::class,
 			Feed::class,
 		] as $class_name ) {
