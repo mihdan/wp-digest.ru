@@ -26,18 +26,6 @@ class Comments {
 
 			    ?>
                 <div class="comments comments--telegram">
-                    <?php
-                    $rating_value = 4.9;
-                    $rating_count = wp_rand( 9, 999 );
-                    ?>
-                    <span style="display: none" itemscope="" itemtype="http://schema.org/Product">
-                        <meta itemprop="name" content="<?php the_title(); ?>">
-                        <meta itemprop="url" content="<?php the_permalink(); ?>">
-                        <span itemprop="aggregateRating" itemscope="" itemtype="http://schema.org/AggregateRating">
-                            <span itemprop="ratingValue"><?php echo esc_attr( $rating_value ); ?></span>
-                            <span itemprop="ratingCount"><?php echo esc_attr( $rating_count ); ?></span>
-                        </span>
-                    </span>
                     <h2 id="reply-title" class="comment-reply-title">Добавить комментарий</h2>
                     <script async
                             src="https://telegram.org/js/telegram-widget.js?14"
