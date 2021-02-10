@@ -463,3 +463,14 @@ add_filter(
         );
     }
 );
+
+add_action(
+    'kadence_single_after_inner_content',
+    function () {
+        if ( ! is_singular( 'vacancy' ) ) {
+            return;
+        }
+
+	    get_template_part( 'template-parts/content/entry_footer', get_post_type() );
+    }
+);
