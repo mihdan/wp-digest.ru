@@ -35,6 +35,10 @@ class Pageviews {
 	 * @return string
 	 */
 	public function post_thumbnail_html( $html, $post_id, $post_thumbnail_id, $size, $attr ) {
+	    if ( is_feed() ) {
+	        return $html;
+        }
+
 		$upload_dir = wp_upload_dir();
 		$meta_data  = wp_get_attachment_metadata( $post_thumbnail_id );
 
@@ -43,7 +47,7 @@ class Pageviews {
 		}
 
 		$base_url = trailingslashit( $upload_dir['baseurl'] ) . dirname( $meta_data['file'] ) . '/';
-		do_action( 'qm/debug', $meta_data );
+
 		ob_start();
 		?>
         <span itemscope itemtype="https://schema.org/ImageObject">
@@ -79,6 +83,10 @@ class Pageviews {
 	 * @return mixed
 	 */
 	public function set_itemprop_for_post_thumbnail( $attr, $attachment, $size ) {
+		if ( is_feed() ) {
+			return $attr;
+		}
+
 		if ( did_action( 'begin_fetch_post_thumbnail_html' ) && in_array( $size, array( 'post-thumbnail', 'full' ), true ) ) {
 			$attr['itemprop'] = 'contentUrl url';
 		}
