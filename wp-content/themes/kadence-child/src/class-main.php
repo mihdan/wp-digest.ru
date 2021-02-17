@@ -43,6 +43,7 @@ class Main {
 			//Subscription::class,
 			Syntax_Highlighter::class,
 			Feed::class,
+			Yandex_Mebmaster::class,
 		] as $class_name ) {
 			( $this->make( $class_name ) )->setup_hooks();
 		}
