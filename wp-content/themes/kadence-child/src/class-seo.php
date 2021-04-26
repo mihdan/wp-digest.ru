@@ -46,12 +46,27 @@ class SEO {
 		 */
 		add_filter( 'the_seo_framework_generated_description', [ $this, 'set_meta_description' ], 10, 2 );
 		add_filter( 'get_the_archive_description', [ $this, 'set_description' ] );
+
+		add_filter( 'kadence_microdata', '__return_false' );
+
+		add_filter( 'the_seo_framework_robots_meta', function ( $meta ) {
+		    if ( ! is_tag() ) {
+		        return $meta;
+            }
+
+		    $meta['robots'] = 'noindex';
+
+		    return $meta;
+        } );
 	}
 
 	public function add_telegram_channel_link() {
 		?>
 		<meta property="telegram:channel" content="@wordpress_digest" />
-		<?php
+		<?php if ( is_tag() ) : ?>
+            <meta name="robots" content="noindex" />
+        <?php endif; ?>
+        <?php
 	}
 
 	public function set_meta_description( $description, $args ) {
@@ -89,7 +104,7 @@ class SEO {
 
 	public function header_noindex() {
 		if ( ! headers_sent() ) {
-			header( 'X-Robots-Tag: noindex, nofollow', true );
+			header( 'X-Robots-Tag: noindex', true );
 		}
 	}
 }

@@ -40,6 +40,7 @@ class Main {
 			Lazy_Load::class,
 			CF7::class,
 			SEO::class,
+			Schema_Org::class,
 			//Subscription::class,
 			Syntax_Highlighter::class,
 			Feed::class,
