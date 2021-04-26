@@ -52,7 +52,8 @@ class CPT {
 				'hierarchical'       => false,
 				'menu_position'      => 5,
 				'menu_icon'          => 'dashicons-groups',
-				'supports'           => array( 'title','editor', 'author', 'thumbnail', 'comments' )
+				'supports'           => array( 'title','editor', 'author', 'thumbnail', 'comments' ),
+				'yarpp_support'      => true,
 			)
 		);
 
@@ -86,7 +87,8 @@ class CPT {
 				'hierarchical'       => false,
 				'menu_position'      => 6,
 				'menu_icon'          => 'dashicons-id-alt',
-				'supports'           => array( 'title','editor', 'author', 'thumbnail', 'comments' )
+				'supports'           => array( 'title','editor', 'author', 'thumbnail', 'comments' ),
+				'yarpp_support'      => true,
 			)
 		);
 
@@ -120,7 +122,8 @@ class CPT {
 				'hierarchical'       => false,
 				'menu_position'      => 6,
 				'menu_icon'          => 'dashicons-heart',
-				'supports'           => array( 'title','editor', 'author', 'thumbnail', 'comments' )
+				'supports'           => array( 'title','editor', 'author', 'thumbnail', 'comments' ),
+				'yarpp_support'      => true,
 			)
 		);
 	}
