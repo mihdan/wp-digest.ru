@@ -8,11 +8,18 @@ namespace Mihdan\Kadence_Child;
 class Comments {
     public function setup_hooks() {
 	    add_action(
-		    'kadence_before_comments',
+		    //'get_template_part_' . 'template-parts/content/entry_related',
+		    //'kadence_before_comments',
+            //'kadence_single_before_entry_navigation',
+            'kadence_after_main_content',
 		    function () {
 			    if ( ! is_singular( [ 'post', 'page', 'vacancy', 'resume', 'recommendations' ] ) ) {
 				    return;
 			    }
+
+			    if ( ! comments_open() ) {
+			        return;
+                }
 
 			    $channel = is_singular( [ 'post', 'page', 'recommendations' ] )
 				    ? 'wordpress_digest'
