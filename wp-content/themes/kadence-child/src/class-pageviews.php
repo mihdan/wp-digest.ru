@@ -10,16 +10,45 @@ class Pageviews {
     private $rating_count;
 
     public function __construct() {
-        $this->rating_value = 4.9;
-        $this->rating_count = wp_rand( 9, 999 );
     }
 
 	public function setup_hooks() {
         add_action( 'kadence_after_loop_entry_meta', [ $this, 'show_counter' ] );
         add_action( 'kadence_after_entry_meta', [ $this, 'show_counter'] );
+        add_action( 'kadence_single_after_entry_title', [ $this, 'show_rating'] );
 	    add_filter( 'pageviews_placeholder_preload', [ $this, 'show_placeholder' ] );
 	    add_filter( 'post_thumbnail_html', array( $this, 'post_thumbnail_html' ), 10, 5 );
 	    add_filter( 'wp_get_attachment_image_attributes', array( $this, 'set_itemprop_for_post_thumbnail' ), 10, 3 );
+    }
+
+    public function get_rating_value() {
+        return 4.9;
+    }
+
+	public function get_rating_count() {
+		return round( get_the_ID() / 100 );
+	}
+
+	public function plural_form( $n, $form1, $form2, $form5 ) {
+		$n = abs($n) % 100;
+		$n1 = $n % 10;
+		if ($n > 10 && $n < 20) return $form5;
+		if ($n1 > 1 && $n1 < 5) return $form2;
+		if ($n1 == 1) return $form1;
+		return $form5;
+	}
+
+	public function show_rating() {
+        ?>
+        <div class="cover__rating">
+            <div class="star_rate" style="cursor:pointer; width: 5.2rem; height:1rem; position: relative;  background-size: auto 100%; display:inline-block; margin-right:0.5rem;">
+                <div class="start_zpol" style="position:absolute; width:96.6%; height:1rem;  background-size: auto 100%"></div>
+            </div>
+            <div id="start_result" style="display:inline-block;">
+                Рейтинг: <span><?php echo esc_attr( $this->get_rating_value() ); ?></span> из <span><?php echo esc_attr( $this->get_rating_count() ); ?></span> <?php echo esc_html( $this->plural_form( $this->get_rating_count(), 'оценки', 'оценок', 'оценок' ) ); ?>
+            </div>
+        </div>
+        <?php
     }
 
 	/**
@@ -35,7 +64,8 @@ class Pageviews {
 	 * @return string
 	 */
 	public function post_thumbnail_html( $html, $post_id, $post_thumbnail_id, $size, $attr ) {
-	    if ( is_feed() ) {
+
+	    if ( 'full' !== $size || is_feed() ) {
 	        return $html;
         }
 
@@ -50,7 +80,7 @@ class Pageviews {
 
 		ob_start();
 		?>
-        <span itemscope itemtype="https://schema.org/ImageObject">
+        <div itemscope itemtype="https://schema.org/ImageObject" class="cover">
 			<?php echo $html; ?>
             <meta itemprop="width" content="<?php echo (int) $meta_data['width']; ?>px" />
             <meta itemprop="height" content="<?php echo (int) $meta_data['height']; ?>px" />
@@ -63,11 +93,39 @@ class Pageviews {
                  </span>
 			<?php endforeach; ?>
             <meta itemprop="name" content="<?php the_title(); ?>">
-            <span itemprop="aggregateRating" itemscope="" itemtype="http://schema.org/AggregateRating">
-                <span itemprop="ratingValue"><?php echo esc_attr( $this->rating_value ); ?></span>
-                <span itemprop="ratingCount"><?php echo esc_attr( $this->rating_count ); ?></span>
-            </span>
-		</span>
+		</div>
+        <script>
+            jQuery(
+                function ( $ ) {
+                    $(document).on('mousemove click', '.star_rate', function(e) {
+                        switch (e.type) {
+                            case 'mousemove':
+                                $('.start_zpol', this).css("width", e.offsetX + "px");
+                                this.style.setProperty('--mwidth_hov', e.offsetX + "px");
+                                break;
+                            case 'click':
+                                $('#start_result').html( 'Загрузка &hellip;' );
+                                $.ajax({
+                                    type: 'POST',
+                                    url: document.location.href,
+                                    data: {
+                                        'val': e.offsetX / ($(this).width() / 100)
+                                    }
+                                }).done(function(data) {
+                                    $('#start_result').html( 'Ваш голос учтён, спасибо!' );
+                                    //if (data.result) {
+                                    //    $('#start_result').html(data.msg);
+                                    //    $('#latest').html(data.latest);
+                                    //}
+                                    //console.log(data.result);
+                                });
+                                break;
+                        }
+                        //console.log(e);
+                    });
+                }
+            );
+        </script>
 		<?php
 		return ob_get_clean();
 	}

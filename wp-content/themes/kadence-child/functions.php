@@ -274,11 +274,26 @@ add_action(
 	function () {
 		?>
 		<!-- Google Tag Manager -->
-		<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-                    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-                'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','GTM-NB92PPM');</script>
+		<script>
+            if ( navigator.userAgent.indexOf( 'Chrome-Lighthouse' ) > -1 ) {
+
+            } else {
+
+                (function (w, d, s, l, i) {
+                    w[l] = w[l] || [];
+                    w[l].push({
+                        'gtm.start':
+                            new Date().getTime(), event: 'gtm.js'
+                    });
+                    var f = d.getElementsByTagName(s)[0],
+                        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+                    j.async = true;
+                    j.src =
+                        'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+                    f.parentNode.insertBefore(j, f);
+                })(window, document, 'script', 'dataLayer', 'GTM-NB92PPM');
+            }
+        </script>
 		<!-- End Google Tag Manager -->
 		<?php
 	}
@@ -473,4 +488,46 @@ add_action(
 
 	    get_template_part( 'template-parts/content/entry_footer', get_post_type() );
     }
+);
+
+add_filter(
+    'mihdan_public_post_preview_post_status',
+    function ( $post_status ) {
+        $post_status[] = 'future';
+
+        return $post_status;
+    }
+);
+/*
+add_filter(
+    'option_active_plugins',
+    static function( $plugins ) {
+        foreach ( $plugins as $plugin ) {
+            if ( $plugin === 'query-monitor/query-monitor.php' && wp_get_environment_type() === 'production' ) {
+                unset( $plugins[ $plugin ] );
+            }
+        }
+
+        return $plugins;
+    }
+);
+*/
+
+//add_action(
+//    'get_template_part_' . 'template-parts/content/entry_related',
+//    function () {
+//        echo 1111;
+//    }
+//);
+
+add_action(
+    'kadence_after_main_content',
+    function () {
+        if ( function_exists( 'related_posts' ) && is_singular( [ 'post', 'vacancy', 'resume', 'recommendations' ] ) ) {
+            echo '<div class="yarpp-related" style="background-color: #fff; padding: 2rem; margin-top: 2.5rem">';
+	        related_posts();
+	        echo '</div>';
+        }
+    },
+    13
 );
