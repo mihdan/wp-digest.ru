@@ -143,9 +143,11 @@ class Source_Filter {
 	/**
 	 * Возвращает подготовленный json для построения графика.
 	 *
+	 * @param int $length
+	 *
 	 * @return string|false
 	 */
-	private function get_urls_prepare_for_js() {
+	private function get_urls_prepare_for_js( int $length ) {
 		$urls = $this->get_urls();
 		$rows = [];
 
@@ -175,7 +177,7 @@ class Source_Filter {
 					'type'  => 'number',
 				],
 			],
-			'rows' => $rows,
+			'rows' => array_slice( $rows, 0, $length ),
 		] );
 	}
 
@@ -185,7 +187,7 @@ class Source_Filter {
 	 * @return void
 	 */
 	public function dashboard_widget_content(): void {
-		$json = $this->get_urls_prepare_for_js();
+		$json = $this->get_urls_prepare_for_js( 10 );
 
 		if ( $json ): ?>
 
