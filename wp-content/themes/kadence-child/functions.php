@@ -523,11 +523,25 @@ add_filter(
 add_action(
     'kadence_after_main_content',
     function () {
-        if ( function_exists( 'related_posts' ) && is_singular( [ 'post', 'vacancy', 'resume', 'recommendations' ] ) ) {
+        if ( function_exists( 'yarpp_related' ) && is_singular( [ 'post', 'vacancy', 'resume', 'recommendations' ] ) && yarpp_related_exist() ) {
             echo '<div class="yarpp-related" style="background-color: #fff; padding: 2rem; margin-top: 2.5rem">';
-	        related_posts();
+	        yarpp_related();
 	        echo '</div>';
         }
     },
     13
+);
+
+add_filter(
+    'widget_posts_args',
+    function ( $args, $instance ) {
+
+        if ( 'Новые вакансии' === $instance['title'] ) {
+            $args['post_type'] = [ 'vacancy' ];
+        }
+
+        return $args;
+    },
+    10,
+    2
 );
