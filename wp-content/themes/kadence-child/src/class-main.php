@@ -45,6 +45,7 @@ class Main {
 			Syntax_Highlighter::class,
 			Feed::class,
 			Yandex_Mebmaster::class,
+			Source_Filter::class,
 		] as $class_name ) {
 			( $this->make( $class_name ) )->setup_hooks();
 		}
