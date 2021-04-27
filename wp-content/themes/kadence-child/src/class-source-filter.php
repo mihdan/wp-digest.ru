@@ -102,6 +102,8 @@ class Source_Filter {
 			)
 		);
 
+		arsort( $result );
+
 		wp_cache_set( $cache_key, $result, HOUR_IN_SECONDS );
 
 		return $result;
