@@ -189,7 +189,7 @@ class Source_Filter {
 
 		if ( $json ): ?>
 
-            <div id="dashboard_widget_post_source_viewer" style="width: 100%; height: 250px;"></div>
+            <div id="dashboard_widget_post_source_viewer_pie" style="width: 100%; height: 250px;"></div>
 
             <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
             <script type="text/javascript">
@@ -197,7 +197,7 @@ class Source_Filter {
                 google.charts.setOnLoadCallback(function () {
                     const data = new google.visualization.DataTable(<?php echo $json ?>);
 
-                    const box = document.getElementById('dashboard_widget_post_source_viewer');
+                    const box = document.getElementById('dashboard_widget_post_source_viewer_pie');
                     const chart = new google.visualization.PieChart(box);
 
                     chart.draw(data);
