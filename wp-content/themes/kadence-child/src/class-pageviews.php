@@ -113,15 +113,9 @@ class Pageviews {
                                     }
                                 }).done(function(data) {
                                     $('#start_result').html( 'Ваш голос учтён, спасибо!' );
-                                    //if (data.result) {
-                                    //    $('#start_result').html(data.msg);
-                                    //    $('#latest').html(data.latest);
-                                    //}
-                                    //console.log(data.result);
                                 });
                                 break;
                         }
-                        //console.log(e);
                     });
                 }
             );

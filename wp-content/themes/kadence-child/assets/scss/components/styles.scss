@@ -9,7 +9,7 @@
 
 .wp-block-embed-youtube {
     .wp-block-embed__wrapper:before {
-        padding: 0 !important;
+       // padding: 0 !important;
     }
 }
 
@@ -68,6 +68,22 @@
 .read-more {
     &--post {
         float: left;
+    }
+
+    &--button {
+        a {
+            background-color: var(--global-palette-btn-bg);
+            color: #fff;
+            display: inline-block;
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 3px;
+            font-size: 0.9em;
+
+            &:hover {
+                background-color: var(--global-palette-btn-bg-hover);
+            }
+        }
     }
 }
 

@@ -13,7 +13,7 @@ class Comments {
             //'kadence_single_before_entry_navigation',
             'kadence_after_main_content',
 		    function () {
-			    if ( ! is_singular( [ 'post', 'page', 'vacancy', 'resume', 'recommendations' ] ) ) {
+			    if ( ! is_singular( [ 'post', 'page', 'vacancy', 'resume', 'recommendations', 'event' ] ) ) {
 				    return;
 			    }
 
@@ -21,7 +21,7 @@ class Comments {
 			        return;
                 }
 
-			    $channel = is_singular( [ 'post', 'page', 'recommendations' ] )
+			    $channel = is_singular( [ 'post', 'page', 'recommendations', 'event' ] )
 				    ? 'wordpress_digest'
 				    : 'wordpress_jobs';
 
@@ -57,7 +57,7 @@ class Comments {
 	    add_action(
 		    'kadence_after_entry_meta',
 		    function () {
-			    if ( ! is_singular( [ 'post', 'vacancy', 'resume', 'recommendations' ] ) ) {
+			    if ( ! is_singular( [ 'post', 'vacancy', 'resume', 'recommendations', 'event' ] ) ) {
 				    return;
 			    }
 			    ?>

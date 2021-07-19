@@ -2,6 +2,8 @@
 namespace Mihdan\Kadence_Child;
 
 use PHPMailer\PHPMailer\PHPMailer;
+use WP_Widget;
+use WP_Widget_Recent_Posts;
 use WP_Admin_Bar;
 use Auryn\Injector;
 use function Kadence\kadence;
@@ -218,13 +220,39 @@ function add_likely( $content ) {
 		return $content;
 	}
 
-	if ( ! is_singular( [ 'post', 'recommendations' ] ) ) {
+	if ( ! is_singular( [ 'post', 'recommendations', 'event' ] ) ) {
 		return $content;
 	}
 
+	if ( is_singular( [ 'event' ] ) ) {
+	    $_content = '';
+
+	    if ( get_field( 'event_start_date' ) ) {
+		    $_content .= '<h2>Время проведения</h2>';
+		    $_content .= '<p>';
+		    $_content .= sprintf( '<b>Дата начала:</b> %s', get_field( 'event_start_date' ) );
+		    $_content .= '<br>';
+		    $_content .= sprintf( '<b>Дата завершения:</b> %s', get_field( 'event_end_date' ) );
+		    $_content .= '</p>';
+	    }
+
+	    if ( get_field( 'event_location_address' ) ) {
+		    $_content .= '<h2>Место проведения</h2>';
+		    $_content .= sprintf( '<p>%s (%s)</p>', get_field( 'event_location_address' ), get_field( 'event_location_name' ) );
+	    }
+
+	    if ( get_field( 'event_organizer_name' ) ) {
+		    $_content .= '<h2>Организатор мероприятия</h2>';
+		    $_content .= sprintf( '<p><a href="%s" target="_blank">%s</a></p>', get_field( 'event_organizer_url' ), get_field( 'event_organizer_name' ) );
+	    }
+
+		$content = $_content . $content;
+	}
+
 	//require_once 'template-parts/likely.php';
-	$url  = get_post_meta( get_the_ID(), 'post_source_url', true );
-	$text = $title = get_post_meta( get_the_ID(), 'post_source_text', true );
+	$url   = get_post_meta( get_the_ID(), 'post_source_url', true );
+	$type  = get_post_meta( get_the_ID(), 'post_source_type', true );
+	$text  = $title = get_post_meta( get_the_ID(), 'post_source_text', true );
 
 	if ( ! $url ) {
 		return $content;
@@ -233,13 +261,13 @@ function add_likely( $content ) {
 	$url = add_query_arg( 'utm_source', 'wp-digest.com', $url );
 
 	if ( ! $text ) {
-		$text  = 'Читать далее';
+		$text  = esc_html__( 'Read More', 'kadence' );
 		$title = parse_url( $url, PHP_URL_HOST );
 	}
 
 	//return $content . sprintf( '<div class="wp-block-buttons wp-block-buttons--actions"><div class="wp-block-button wp-block-button--more"><a class="wp-block-button__link wp-block-button__link--more" href="%s" target="_blank" title="%s">%s</a></div><!--div class="wp-block-button is-style-outline wp-block-button--comments"><a href="#reply-title" class="wp-block-button__link button--comments icon-comment-alt">Оставить комментарий</a></div--><!--div class="wp-block-button is-style-outline wp-block-button--emoji"><a href="#post-emoji" class="wp-block-button__link button--emoji">Оценить</a></div--></div>', esc_url( $url ), esc_attr( $title ), esc_attr( $text ) );
 
-	return $content . sprintf( '<p class="read-more read-more--post"><a href="%s" target="_blank" title="%s">%s</a></p>', esc_url( $url ), esc_attr( $title ), esc_attr( $text ) );
+	return $content . sprintf( '<p class="read-more read-more--post read-more--%s"><a href="%s" target="_blank" title="%s">%s</a></p>', esc_attr( $type ), esc_url( $url ), esc_attr( $title ), esc_attr( $text ) );
 }
 add_filter( 'the_content', __NAMESPACE__ . '\add_likely', 1 );
 
@@ -536,12 +564,116 @@ add_filter(
     'widget_posts_args',
     function ( $args, $instance ) {
 
-        if ( 'Новые вакансии' === $instance['title'] ) {
-            $args['post_type'] = [ 'vacancy' ];
+	    if ( isset( $instance['cpt'] ) ) {
+		    $args['post_type'] = $instance['cpt'];
         }
+
+	    if ( isset( $instance['order_by'] ) ) {
+		    $args['orderby'] = $instance['order_by'];
+	    }
 
         return $args;
     },
     10,
     2
+);
+
+add_filter(
+    'widget_update_callback',
+    function ( $instance, $new_instance, $old_instance, WP_Widget $widget ) {
+
+	    if ( ! $widget instanceof WP_Widget_Recent_Posts ) {
+		    return $instance;
+	    }
+
+	    $instance['cpt']      = $new_instance['cpt'];
+	    $instance['order_by'] = $new_instance['order_by'];
+
+	    return $instance;
+    },
+    10,
+    4
+);
+add_action(
+	'in_widget_form',
+	function ( WP_Widget $widget, $form, $instance ) {
+        if ( ! $widget instanceof WP_Widget_Recent_Posts ) {
+            return;
+        }
+
+		$post_types = get_post_types( [ 'public' => true ], 'objects' );
+
+        if ( ! $post_types ) {
+            return;
+        }
+
+		$order_fields = [
+			'post_date'  => 'Дата',
+			'post_title' => 'Название',
+			'post_name'  => 'Слаг',
+			'rand'       => 'Случайно',
+		];
+
+		$cpt      = $instance['cpt'] ?? 'post';
+		$order_by = $instance['order_by'] ?? 'post_date';
+	    ?>
+        <p>
+            <label for="<?php echo $widget->get_field_id('cpt'); ?>">Тип записей:</label>
+            <select id="<?php echo $widget->get_field_id('cpt'); ?>" name="<?php echo $widget->get_field_name('cpt'); ?>">
+                <?php foreach ( $post_types as $post_type ) : ?>
+                    <option value="<?php echo esc_attr( $post_type->name ); ?>"<?php selected( $cpt, $post_type->name ); ?>><?php echo esc_html( $post_type->label ); ?></option>
+                <?php endforeach; ?>
+            </select>
+        </p>
+
+        <p>
+            <label for="<?php echo $widget->get_field_id('order_by'); ?>">Сортировать по полю:</label>
+            <select id="<?php echo $widget->get_field_id('order_by'); ?>" name="<?php echo $widget->get_field_name('order_by'); ?>">
+				<?php foreach ( $order_fields as $name => $label ) : ?>
+                    <option value="<?php echo esc_attr( $name ); ?>"<?php selected( $order_by, $name ); ?>><?php echo esc_html( $label ); ?></option>
+				<?php endforeach; ?>
+            </select>
+        </p>
+        <?php
+	},
+	10,
+	3
+);
+
+add_filter(
+	'widget_display_callback__',
+	function ( array $instance, WP_Widget $widget, array $args ) {
+
+	    if ( ! $widget instanceof WP_Widget_Recent_Posts ) {
+			return $instance;
+		}
+
+		$args['post_type'] = $instance['cpt'];// var_dump($instance);
+
+		return $instance;
+	},
+	10,
+	3
+);
+
+add_action(
+    'kadence_before_main_content',
+    function () {
+        ?>
+        <style>
+            .loading-express {
+                margin-bottom: 2rem;
+                min-height: 176px;
+                background-color: #1b2638
+            }
+            @media (max-width: 540px) {
+                .loading-express {
+                    min-height: 192px;
+                }
+            }
+        </style>
+        <div class="loading-express" data-widget="loading.express"></div>
+        <script src="//widget.loading.express/check.js" async></script>
+        <?php
+    }
 );

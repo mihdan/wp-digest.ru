@@ -38,19 +38,22 @@ if ( isset( $_wp_additional_image_sizes['yarpp-thumbnail'] ) ) {
 <div class="related-posts">
 <h2 class="related-posts__header">Читайте также</h2>
     <?php if ( have_posts() ) : ?>
-        <ul class="related-posts__grid">
+        <ul class="related-posts__grid" itemscope itemtype="https://schema.org/ItemList">
             <?php while ( have_posts() ) : the_post(); ?>
                 <?php if ( has_post_thumbnail() ) : ?>
-                <li class="related-item">
-                    <a class="related-item__anchor" href="<?php the_permalink(); ?>" rel="bookmark norewrite" title="<?php the_title_attribute(); ?>">
+                <li class="related-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/Article">
+                    <a itemprop="url" class="related-item__anchor" href="<?php the_permalink(); ?>" rel="bookmark norewrite" title="<?php the_title_attribute(); ?>">
                         <div class="related-item__media">
                             <?php the_post_thumbnail( $dimensions['size'], array( 'data-pin-nopin' => 'true', 'class' => 'related-item__image' ) ); ?>
                         </div>
-                        <div class="related-item__date">
+                        <time class="related-item__date" itemprop="datePublished" datetime="<?php echo get_the_date( 'c' ); ?>">
                             <?php the_date(); ?>
-                        </div>
-                        <div class="related-item__title">
+                        </time>
+                        <div class="related-item__title" itemprop="name">
 		                    <?php the_title(); ?>
+                        </div>
+                        <div class="related-item__description" itemprop="description">
+		                    <?php the_excerpt(); ?>
                         </div>
                     </a>
                 </li>
@@ -72,7 +75,7 @@ if ( isset( $_wp_additional_image_sizes['yarpp-thumbnail'] ) ) {
         padding: 0;
         margin: 0;
         display: grid;
-        grid-gap: 20px;
+        grid-gap: 1.5rem;
         grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     }
     .related-item {}
@@ -85,11 +88,12 @@ if ( isset( $_wp_additional_image_sizes['yarpp-thumbnail'] ) ) {
         overflow: hidden;
         background-color: #e7e7e7;
         margin-bottom: 0.5rem;
+        border: 1px solid #e7e7e7;
     }
     .related-item__image {
         position: absolute;
         width: 100%;
-        height: auto;
+        height: 100%;
         object-fit: cover;
         left: 0;
         top: 0;
@@ -98,8 +102,12 @@ if ( isset( $_wp_additional_image_sizes['yarpp-thumbnail'] ) ) {
         color: #b5b5b5;
         font-size: 0.8em;
         margin-bottom: 0.3rem;
+        display: block;
     }
     .related-item__title {
         color: #333;
+    }
+    .related-item__description {
+        display: none;
     }
 </style>

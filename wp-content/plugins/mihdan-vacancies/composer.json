@@ -1,0 +1,31 @@
+{
+    "name": "mihdan/vacancies",
+    "description": "Плагин для создания и управенления вакансиями",
+    "type": "wordpress-plugin",
+    "require": {
+        "woocommerce/action-scheduler": "dev-master"
+    }
+    ,
+    "require-dev": {
+        "roave/security-advisories": "dev-latest"
+    },
+    "license": "GPL2",
+    "autoload": {
+        "classmap": [
+            "src"
+        ]
+    },
+    "authors": [
+        {
+            "name": "mihdan",
+            "email": "mikhail@kobzarev.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "extra": {
+        "installer-paths": {
+            "vendor/{$vendor}/{$name}/": ["type:wordpress-plugin"]
+        }
+    }
+
+}

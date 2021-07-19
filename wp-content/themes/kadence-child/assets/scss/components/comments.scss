@@ -33,12 +33,13 @@
     #comments {
         margin-left: -1rem !important;
         margin-right: -1rem !important;
-        //padding: 0 !important;
     }
 
     .comments {
         &--telegram {
             padding: 1rem;
+            margin-left: -1rem !important;
+            margin-right: -1rem !important;
         }
     }
 }
